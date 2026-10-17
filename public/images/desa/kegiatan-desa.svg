@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fdba74" />
+      <stop offset="35%" stop-color="#fef08a" />
+      <stop offset="70%" stop-color="#bbf7d0" />
+      <stop offset="100%" stop-color="#86efac" />
+    </linearGradient>
+    <linearGradient id="hillFar" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#047857" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#064e3b" stop-opacity="0.7" />
+    </linearGradient>
+    <linearGradient id="hillNear" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#047857" />
+    </linearGradient>
+    <linearGradient id="riceGreen" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a3e635" />
+      <stop offset="100%" stop-color="#15803d" />
+    </linearGradient>
+    <linearGradient id="riceGold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="100%" stop-color="#ca8a04" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1200" height="800" fill="url(#skyGrad)" />
+
+  <!-- Sun -->
+  <circle cx="850" cy="220" r="110" fill="url(#sunGrad)" opacity="0.85" />
+  <circle cx="850" cy="220" r="160" fill="#fef08a" opacity="0.25" />
+
+  <!-- Distant Sampung Karst Hills -->
+  <path d="M0 420 Q180 260 420 340 T850 280 T1200 360 L1200 800 L0 800 Z" fill="url(#hillFar)" />
+  <path d="M0 470 Q240 330 540 400 T1000 330 T1200 420 L1200 800 L0 800 Z" fill="url(#hillNear)" />
+
+  <!-- Rice Terraces (Terasering Sawah Karangwaluh) -->
+  <path d="M-50 540 Q250 490 600 530 T1250 490 L1250 800 L-50 800 Z" fill="url(#riceGreen)" />
+  <path d="M-50 610 Q320 560 700 600 T1250 560 L1250 800 L-50 800 Z" fill="url(#riceGold)" />
+  <path d="M-50 680 Q200 630 650 670 T1250 630 L1250 800 L-50 800 Z" fill="url(#riceGreen)" />
+  <path d="M-50 740 Q400 700 850 730 T1250 710 L1250 800 L-50 800 Z" fill="#166534" />
+
+  <!-- Coconut Trees Silhouettes on Side -->
+  <g transform="translate(140, 320)">
+    <!-- Tree Trunk 1 -->
+    <path d="M0 260 Q30 140 20 0" stroke="#064e3b" stroke-width="12" fill="none" stroke-linecap="round" />
+    <!-- Fronds -->
+    <path d="M20 0 Q-60 -40 -110 -20" stroke="#047857" stroke-width="6" fill="none" stroke-linecap="round" />
+    <path d="M20 0 Q-40 -80 -70 -110" stroke="#047857" stroke-width="6" fill="none" stroke-linecap="round" />
+    <path d="M20 0 Q20 -90 10 -130" stroke="#047857" stroke-width="6" fill="none" stroke-linecap="round" />
+    <path d="M20 0 Q80 -70 120 -80" stroke="#047857" stroke-width="6" fill="none" stroke-linecap="round" />
+    <path d="M20 0 Q90 -20 130 10" stroke="#047857" stroke-width="6" fill="none" stroke-linecap="round" />
+  </g>
+  <g transform="translate(230, 350)">
+    <!-- Tree Trunk 2 -->
+    <path d="M0 240 Q-20 120 -10 0" stroke="#064e3b" stroke-width="9" fill="none" stroke-linecap="round" />
+    <!-- Fronds -->
+    <path d="M-10 0 Q-80 -40 -100 0" stroke="#047857" stroke-width="5" fill="none" stroke-linecap="round" />
+    <path d="M-10 0 Q-50 -70 -70 -100" stroke="#047857" stroke-width="5" fill="none" stroke-linecap="round" />
+    <path d="M-10 0 Q20 -80 30 -110" stroke="#047857" stroke-width="5" fill="none" stroke-linecap="round" />
+    <path d="M-10 0 Q70 -50 90 -60" stroke="#047857" stroke-width="5" fill="none" stroke-linecap="round" />
+  </g>
+
+  <!-- Village Gazebo / Gubuk Sawah Tradisional -->
+  <g transform="translate(780, 520)">
+    <polygon points="40,20 0,60 100,60" fill="#78350f" />
+    <rect x="15" y="60" width="8" height="40" fill="#451a03" />
+    <rect x="77" y="60" width="8" height="40" fill="#451a03" />
+    <rect x="10" y="85" width="80" height="6" fill="#92400e" rx="2" />
+  </g>
+
+  <!-- Title Badge overlay -->
+  <rect x="40" y="680" width="380" height="75" rx="20" fill="#064e3b" opacity="0.9" />
+  <text x="65" y="718" font-family="'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="bold" fill="#ffffff">🌾 Panen Raya & Pertanian Warga</text>
+  <text x="65" y="742" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" fill="#fef08a">Desa Karangwaluh, Sampung, Ponorogo</text>
+</svg>

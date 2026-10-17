@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="warmBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb" />
+      <stop offset="50%" stop-color="#fef3c7" />
+      <stop offset="100%" stop-color="#fde68a" />
+    </linearGradient>
+    <linearGradient id="honeyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="30%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <linearGradient id="jarGlass" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="20%" stop-color="#ffffff" stop-opacity="0.2" />
+      <stop offset="80%" stop-color="#ffffff" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="url(#warmBg)" />
+
+  <!-- Honeycomb pattern background (Hexagons) -->
+  <g fill="none" stroke="#f59e0b" stroke-width="2.5" opacity="0.35">
+    <polygon points="150,80 185,100 185,140 150,160 115,140 115,100" />
+    <polygon points="220,80 255,100 255,140 220,160 185,140 185,100" />
+    <polygon points="185,140 220,160 220,200 185,220 150,200 150,160" />
+    <polygon points="255,140 290,160 290,200 255,220 220,200 220,160" fill="#fef3c7" fill-opacity="0.5" />
+    <polygon points="1000,100 1035,120 1035,160 1000,180 965,160 965,120" />
+    <polygon points="1070,100 1105,120 1105,160 1070,180 1035,160 1035,120" />
+    <polygon points="1035,160 1070,180 1070,220 1035,240 1000,220 1000,180" fill="#fde68a" fill-opacity="0.6" />
+  </g>
+
+  <!-- Wooden Table -->
+  <rect x="0" y="580" width="1200" height="220" fill="#78350f" />
+  <rect x="0" y="580" width="1200" height="25" fill="#92400e" />
+
+  <!-- Big Glass Honey Jar -->
+  <g transform="translate(460, 240)">
+    <!-- Jar Body Fill (Honey) -->
+    <rect x="35" y="100" width="210" height="250" rx="30" fill="url(#honeyGrad)" />
+    <!-- Honey surface meniscus -->
+    <ellipse cx="140" cy="110" rx="100" ry="18" fill="#fef08a" />
+    <!-- Glass Jar Outer Outline & Shine -->
+    <rect x="30" y="90" width="220" height="270" rx="35" fill="url(#jarGlass)" stroke="#ffffff" stroke-width="4" />
+    <!-- Label on Jar -->
+    <rect x="50" y="170" width="180" height="110" rx="12" fill="#fff" stroke="#f59e0b" stroke-width="2" />
+    <text x="140" y="205" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="bold" fill="#78350f" text-anchor="middle">MADU MURNI</text>
+    <text x="140" y="228" font-family="'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="900" fill="#b45309" text-anchor="middle">KARANGWALUH</text>
+    <text x="140" y="250" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="600" fill="#047857" text-anchor="middle">100% Asli & Alami • Sampung</text>
+    <circle cx="140" cy="265" r="4" fill="#f59e0b" />
+    <!-- Jar Neck & Lid -->
+    <rect x="65" y="65" width="150" height="30" rx="6" fill="#d97706" stroke="#b45309" stroke-width="3" />
+    <!-- Fabric / Jute Lid Wrap with String -->
+    <path d="M50 40 Q140 25 230 40 L220 75 Q140 85 60 75 Z" fill="#d4d4d8" stroke="#71717a" stroke-width="2" />
+    <line x1="55" y1="65" x2="225" y2="65" stroke="#78350f" stroke-width="4" />
+  </g>
+
+  <!-- Wooden Honey Dipper (Sendok Madu Kayu) -->
+  <g transform="translate(730, 360) rotate(35)">
+    <rect x="0" y="0" width="16" height="260" rx="8" fill="#d97706" />
+    <rect x="-14" y="220" width="44" height="12" rx="4" fill="#b45309" />
+    <rect x="-18" y="236" width="52" height="12" rx="4" fill="#b45309" />
+    <rect x="-18" y="252" width="52" height="12" rx="4" fill="#b45309" />
+    <rect x="-14" y="268" width="44" height="12" rx="4" fill="#b45309" />
+    <!-- Honey Drop -->
+    <path d="M8 290 Q15 310 8 325 Q1 310 8 290 Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+  </g>
+
+  <!-- Honey Bee Illustration -->
+  <g transform="translate(340, 180) scale(0.9)">
+    <!-- Wings -->
+    <ellipse cx="-15" cy="-20" rx="16" ry="28" fill="#bae6fd" opacity="0.75" transform="rotate(-30 -15 -20)" />
+    <ellipse cx="15" cy="-20" rx="16" ry="28" fill="#bae6fd" opacity="0.75" transform="rotate(30 15 -20)" />
+    <!-- Body -->
+    <ellipse cx="0" cy="0" rx="24" ry="32" fill="#fbbf24" stroke="#78350f" stroke-width="3" />
+    <!-- Stripes -->
+    <path d="M-22 -8 Q0 0 22 -8" stroke="#451a03" stroke-width="7" fill="none" />
+    <path d="M-24 6 Q0 14 24 6" stroke="#451a03" stroke-width="7" fill="none" />
+    <!-- Stinger -->
+    <polygon points="0,32 -4,42 4,42" fill="#451a03" />
+  </g>
+
+  <!-- Badge -->
+  <rect x="40" y="680" width="370" height="75" rx="20" fill="#064e3b" opacity="0.95" />
+  <text x="65" y="718" font-family="'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="bold" fill="#ffffff">🍯 Madu Alami Klanceng & Hutan</text>
+  <text x="65" y="742" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" fill="#fef08a">Produk Unggulan UMKM Karangwaluh</text>
+</svg>

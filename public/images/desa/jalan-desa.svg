@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="roadSky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="60%" stop-color="#bae6fd" />
+      <stop offset="100%" stop-color="#e0f2fe" />
+    </linearGradient>
+    <linearGradient id="asphalt" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#64748b" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="hillBack" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#064e3b" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1200" height="800" fill="url(#roadSky)" />
+
+  <!-- Hills of Sampung Ponorogo -->
+  <path d="M0 380 Q300 240 600 320 T1200 260 L1200 800 L0 800 Z" fill="url(#hillBack)" opacity="0.6" />
+  <path d="M0 430 Q450 310 800 410 T1200 350 L1200 800 L0 800 Z" fill="#065f46" />
+
+  <!-- Roadside Trees & Greenery -->
+  <!-- Left Greenery -->
+  <path d="M0 500 Q200 460 380 560 L0 800 Z" fill="#15803d" />
+  <circle cx="100" cy="460" r="90" fill="#16a34a" />
+  <circle cx="200" cy="480" r="80" fill="#22c55e" />
+  <circle cx="280" cy="510" r="70" fill="#15803d" />
+
+  <!-- Right Greenery -->
+  <path d="M1200 500 Q1000 460 820 560 L1200 800 Z" fill="#15803d" />
+  <circle cx="1100" cy="460" r="90" fill="#16a34a" />
+  <circle cx="1000" cy="480" r="80" fill="#22c55e" />
+  <circle cx="920" cy="510" r="70" fill="#15803d" />
+
+  <!-- Flowers (Bougainvillea) on Sidewalk -->
+  <circle cx="240" cy="550" r="15" fill="#f43f5e" />
+  <circle cx="255" cy="560" r="12" fill="#fb7185" />
+  <circle cx="225" cy="565" r="14" fill="#e11d48" />
+  <circle cx="950" cy="550" r="15" fill="#f43f5e" />
+  <circle cx="970" cy="565" r="14" fill="#fb7185" />
+
+  <!-- Paved Country Road (Jalan Aspal Mulus Desa) -->
+  <polygon points="570,440 630,440 1020,800 180,800" fill="url(#asphalt)" />
+
+  <!-- Road Center Dashed Line -->
+  <polygon points="597,450 603,450 605,480 595,480" fill="#f8fafc" opacity="0.8" />
+  <polygon points="595,510 605,510 608,560 592,560" fill="#f8fafc" opacity="0.8" />
+  <polygon points="592,600 608,600 612,670 588,670" fill="#f8fafc" opacity="0.85" />
+  <polygon points="587,720 613,720 620,800 580,800" fill="#f8fafc" opacity="0.9" />
+
+  <!-- Solar Powered Streetlight (Lampu PJU Tenaga Surya Desa) -->
+  <g transform="translate(320, 360)">
+    <rect x="0" y="0" width="8" height="220" fill="#94a3b8" />
+    <path d="M4 0 L30 -25 L45 -20" stroke="#94a3b8" stroke-width="6" fill="none" />
+    <rect x="35" y="-35" width="28" height="12" rx="2" fill="#0284c7" />
+    <ellipse cx="45" cy="-18" rx="8" ry="4" fill="#fef08a" />
+  </g>
+
+  <!-- Badge -->
+  <rect x="40" y="680" width="370" height="75" rx="20" fill="#064e3b" opacity="0.95" />
+  <text x="65" y="718" font-family="'Plus Jakarta Sans', sans-serif" font-size="20" font-weight="bold" fill="#ffffff">🛣️ Infrastruktur Jalan Asri Desa</text>
+  <text x="65" y="742" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" fill="#fef08a">Aksesibilitas Warga Karangwaluh</text>
+</svg>
