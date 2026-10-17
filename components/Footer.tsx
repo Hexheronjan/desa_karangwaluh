@@ -31,11 +31,12 @@ export function Footer() {
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-emerald-900/60 p-2 border border-emerald-700/40 flex items-center justify-center">
                 <Image
-                  src="/images/desa/logo-karangwaluh.svg"
-                  alt="Logo Desa Karangwaluh"
+                  src="/images/desa/logo.gif"
+                  alt="Lambang Kabupaten Ponorogo - Desa Karangwaluh"
                   width={44}
                   height={44}
                   className="w-full h-full object-contain"
+                  unoptimized
                 />
               </div>
               <div>

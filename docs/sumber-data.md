@@ -49,4 +49,4 @@ Seluruh aset visual disimpan secara lokal di `public/images/desa/` (tidak melaku
 5. **`kegiatan-desa.svg`**: Ilustrasi vektor gotong royong dan panen raya padi sawah terasering di bawah bayang-bayang bukit kapur Sampung.
 6. **`jalan-desa.svg`**: Ilustrasi vektor jalan aspal desa yang mulus, asri, dengan lampu PJU surya dan tanaman bunga bougainvillea.
 7. **`umkm-anyaman.svg`**: Ilustrasi vektor produk kerajinan anyaman bambu & besek tradisional buatan tangan pengrajin lokal.
-8. **`logo-karangwaluh.svg`**: Lambang vektor resmi Desa Karangwaluh berhiaskan perisai zamrud, rumah joglo, padi, kapas, dan bintang.
+8. **`logo.gif`**: Lambang resmi Kabupaten Ponorogo yang digunakan sebagai identitas resmi pemerintahan Desa Karangwaluh pada navbar, footer, surat resmi, dan favicon website.

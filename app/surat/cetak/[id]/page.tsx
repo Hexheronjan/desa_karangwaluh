@@ -107,11 +107,12 @@ function CetakSuratContent() {
         <div className="flex items-center justify-between pb-4 border-b-4 border-double border-black">
           <div className="w-20 h-20 relative shrink-0">
             <Image
-              src="/images/desa/logo-karangwaluh.svg"
-              alt="Logo Resmi Karangwaluh"
+              src="/images/desa/logo.gif"
+              alt="Lambang Kabupaten Ponorogo - Desa Karangwaluh"
               fill
               className="object-contain"
               priority
+              unoptimized
             />
           </div>
 

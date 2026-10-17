@@ -86,12 +86,13 @@ export function Navbar() {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-xl p-1 bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-800/50 flex items-center justify-center shadow-xs transition-transform group-hover:scale-105">
               <Image
-                src="/images/desa/logo-karangwaluh.svg"
-                alt="Logo Desa Karangwaluh"
+                src="/images/desa/logo.gif"
+                alt="Lambang Kabupaten Ponorogo - Desa Karangwaluh"
                 width={40}
                 height={40}
                 className="w-full h-full object-contain"
                 priority
+                unoptimized
               />
             </div>
             <div>

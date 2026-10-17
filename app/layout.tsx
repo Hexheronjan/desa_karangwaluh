@@ -38,8 +38,8 @@ export const metadata: Metadata = {
   authors: [{ name: "Pemerintah Desa Karangwaluh" }],
   creator: "Pemerintah Desa Karangwaluh",
   icons: {
-    icon: "/images/desa/logo-karangwaluh.svg",
-    apple: "/images/desa/logo-karangwaluh.svg",
+    icon: "/images/desa/logo.gif",
+    apple: "/images/desa/logo.gif",
   },
   openGraph: {
     title: `${villageConfig.name} - Melayani dari Hati`,
