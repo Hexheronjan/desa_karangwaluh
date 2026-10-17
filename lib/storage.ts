@@ -213,6 +213,18 @@ export function initVillageStorage(): void {
     }
     if (!window.localStorage.getItem(STORAGE_KEYS.PRODUCTS)) {
       window.localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(localProducts));
+    } else {
+      const existingProds = window.localStorage.getItem(STORAGE_KEYS.PRODUCTS);
+      if (existingProds && existingProds.includes(".svg")) {
+        try {
+          const parsedProds = JSON.parse(existingProds);
+          const migratedProds = parsedProds.map((p: ProductUmkm) => ({
+            ...p,
+            image: p.image.replace("umkm-madu.svg", "umkm-madu.jpg").replace("umkm-anyaman.svg", "umkm-anyaman.jpg"),
+          }));
+          window.localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(migratedProds));
+        } catch {}
+      }
     }
     if (!window.localStorage.getItem(STORAGE_KEYS.GALLERY)) {
       window.localStorage.setItem(STORAGE_KEYS.GALLERY, JSON.stringify(villageGallery));
