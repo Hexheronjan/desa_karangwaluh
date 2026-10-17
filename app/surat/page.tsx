@@ -216,17 +216,22 @@ export default function SuratPage() {
                 <span>{copied ? "Tersalin!" : "Salin Kode"}</span>
               </button>
             </div>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-2">
-              Gunakan kode ini di halaman lacak atau Anda bisa memantau semua surat di menu Surat Saya.
-            </p>
+            <div className="mt-3 pt-3 border-t border-emerald-200/60 dark:border-emerald-800/60 text-xs text-emerald-950 dark:text-emerald-200 space-y-1">
+              <p className="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
+                🏢 Alur Pengambilan Surat Fisik:
+              </p>
+              <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed">
+                Surat fisik resmi akan diproses, dicetak, dan ditandatangani Kepala Desa dengan stempel basah. Saat status menjadi <strong>"Siap Diambil"</strong>, petugas akan mengabari Anda via WhatsApp untuk mengambil surat langsung di Kantor Balai Desa Karangwaluh.
+              </p>
+            </div>
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <Link
-              href="/surat/saya"
+              href={`/lacak?kode=${createdRequest.id}`}
               className="inline-flex items-center justify-center gap-2 flex-1 py-3.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm shadow-md transition-all active:scale-98"
             >
-              <span>Daftar Surat Saya</span>
+              <span>Lacak Status Surat Ini</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
@@ -337,8 +342,8 @@ export default function SuratPage() {
             </div>
 
             <div className="pt-4 flex items-center justify-between">
-              <Link href="/surat/saya" className="text-xs font-semibold text-emerald-800 dark:text-emerald-300 underline">
-                Lihat Surat Saya yang Sudah Ada &rarr;
+              <Link href="/lacak" className="text-xs font-semibold text-emerald-800 dark:text-emerald-300 underline">
+                Lacak Status Surat Sebelumnya &rarr;
               </Link>
               <button
                 type="button"

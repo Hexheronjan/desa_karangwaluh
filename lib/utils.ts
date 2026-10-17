@@ -49,3 +49,26 @@ export function formatWhatsAppUrl(phone: string, message: string): string {
   }
   return `https://wa.me/${cleaned}?text=${encodeURIComponent(message)}`;
 }
+
+// PRIVACY PROTECTION MASKING HELPERS
+export function maskNik(nik: string): string {
+  if (!nik || nik.length < 8) return "****************";
+  // Show first 6 digits, mask middle, show last 4 digits (standard government privacy masking)
+  return nik.slice(0, 6) + "******" + nik.slice(-4);
+}
+
+export function maskName(name: string): string {
+  if (!name) return "***";
+  const words = name.trim().split(/\s+/);
+  return words
+    .map((w) => {
+      if (w.length <= 2) return w[0] + "*";
+      return w[0] + "*".repeat(Math.max(w.length - 2, 2)) + w[w.length - 1];
+    })
+    .join(" ");
+}
+
+export function maskPhone(phone: string): string {
+  if (!phone || phone.length < 7) return "***";
+  return phone.slice(0, 4) + "****" + phone.slice(-3);
+}

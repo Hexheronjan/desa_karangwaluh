@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   FileText,
   MessageSquareWarning,
@@ -26,11 +27,24 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { villageConfig, localProducts, villageNews, villageGallery } from "@/lib/config";
+import {
+  getStoredVillageConfig,
+  getStoredProducts,
+  getStoredGallery,
+  getStoredNews,
+} from "@/lib/storage";
 import { formatWhatsAppUrl } from "@/lib/utils";
 import { StatCounter } from "@/components/StatCounter";
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 
 export default function HomePage() {
+  const router = useRouter();
+  const [config, setConfig] = useState(villageConfig);
+  const [products, setProducts] = useState(localProducts);
+  const [gallery, setGallery] = useState(villageGallery);
+  const [newsList, setNewsList] = useState(villageNews);
+  const [trackCode, setTrackCode] = useState("");
+
   const [todayStatus, setTodayStatus] = useState<{
     isOpen: boolean;
     hours: string;
@@ -40,6 +54,20 @@ export default function HomePage() {
     hours: "08.00 - 15.00 WIB",
     dayName: "Hari Ini",
   });
+
+  function reloadAllData() {
+    const cfg = getStoredVillageConfig();
+    setConfig(cfg);
+    setProducts(getStoredProducts());
+    setGallery(getStoredGallery());
+    setNewsList(getStoredNews());
+  }
+
+  useEffect(() => {
+    reloadAllData();
+    window.addEventListener("village-storage-update", reloadAllData);
+    return () => window.removeEventListener("village-storage-update", reloadAllData);
+  }, []);
 
   useEffect(() => {
     const days = [
@@ -56,7 +84,7 @@ export default function HomePage() {
     const currentHour = now.getHours() + now.getMinutes() / 60;
 
     let isOpen = false;
-    let hours = villageConfig.serviceHours.weekdays;
+    let hours = config.serviceHours.weekdays;
 
     if (day >= 1 && day <= 4) {
       // Senin - Kamis
@@ -77,12 +105,12 @@ export default function HomePage() {
       hours,
       dayName: days[day],
     });
-  }, []);
+  }, [config]);
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* 1. HERO SECTION (Layar Penuh dengan Foto Desa & Gradasi Elegan) */}
-      <section className="relative min-h-[92vh] sm:min-h-[95vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[92vh] sm:min-h-[96vh] flex items-center justify-center overflow-hidden">
         {/* Background Image Next.js */}
         <div className="absolute inset-0 z-0">
           <Image
@@ -95,33 +123,51 @@ export default function HomePage() {
             unoptimized
           />
           {/* Multi-layered Warm Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/65 to-emerald-950/30" />
-          <div className="absolute inset-0 bg-radial-at-c from-transparent via-emerald-950/40 to-emerald-950/80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/70 to-emerald-950/40" />
+          <div className="absolute inset-0 bg-radial-at-c from-transparent via-emerald-950/30 to-emerald-950/85" />
+          {/* Ambient Warm Glow */}
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[550px] h-[280px] bg-amber-500/15 blur-[120px] rounded-full pointer-events-none animate-pulse-glow" />
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center flex flex-col items-center">
-          {/* Badge Wilayah */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-amber-300 text-xs sm:text-sm font-semibold mb-6 shadow-md animate-fade-in">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 text-center flex flex-col items-center">
+          {/* Badge Wilayah & Status */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-amber-300 text-xs sm:text-sm font-bold mb-6 shadow-lg animate-fade-in">
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-            <span>Selamat Datang di Portal Resmi Warga</span>
+            <span>Kecamatan Sampung • Kabupaten Ponorogo</span>
           </div>
 
           {/* Judul Besar yang Hangat */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-[1.15] max-w-4xl drop-shadow-md">
-            Desa Karangwaluh yang Asri, Guyub, dan Melayani dari Hati
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.12] max-w-4xl drop-shadow-md">
+            Desa Karangwaluh yang Asri, Guyub, & Melayani dari Hati
           </h1>
 
           {/* Satu Kalimat Penjelasan */}
           <p className="mt-5 text-base sm:text-xl text-emerald-100/95 max-w-2xl font-normal leading-relaxed drop-shadow-xs">
-            Urus keperluan administrasi kependudukan, buat surat resmi, dan sampaikan aspirasi warga dengan cepat langsung dari ponsel Anda.
+            Portal resmi warga untuk mengajukan surat online, memantau pengaduan lingkungan, dan memajukan produk UMKM desa dari ponsel Anda.
           </p>
 
+          {/* Micro Feature Highlights (Pill Badges) */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm text-emerald-200">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-900/60 backdrop-blur-md border border-emerald-700/50">
+              <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+              <span>100% Layanan Gratis</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-900/60 backdrop-blur-md border border-emerald-700/50">
+              <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+              <span>Tanpa Antre di Balai Desa</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-900/60 backdrop-blur-md border border-emerald-700/50">
+              <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+              <span>Kabar Otomatis via WhatsApp</span>
+            </span>
+          </div>
+
           {/* Dua Tombol CTA Utama (Buat Surat & Sampaikan Pengaduan) */}
-          <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto">
+          <div className="mt-8 sm:mt-9 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto">
             <Link
               href="/surat"
-              className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-emerald-950 font-extrabold text-base sm:text-lg shadow-lg hover:shadow-amber-500/30 transition-all duration-200 active:scale-98"
+              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-black text-base sm:text-lg shadow-xl shadow-amber-500/25 hover:shadow-amber-400/40 ring-4 ring-amber-400/20 transition-all duration-200 active:scale-98"
             >
               <FileText className="w-5 h-5 text-emerald-950 stroke-[2.5]" />
               <span>Buat Surat Online</span>
@@ -130,7 +176,7 @@ export default function HomePage() {
 
             <Link
               href="/pengaduan"
-              className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-white/20 hover:bg-white/30 text-white backdrop-blur-md border border-white/30 font-bold text-base sm:text-lg shadow-md transition-all duration-200 active:scale-98"
+              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-white/15 hover:bg-white/25 text-white backdrop-blur-md border border-white/30 font-bold text-base sm:text-lg shadow-lg hover:border-white/50 transition-all duration-200 active:scale-98"
             >
               <MessageSquareWarning className="w-5 h-5 text-amber-300" />
               <span>Sampaikan Pengaduan</span>
@@ -138,10 +184,10 @@ export default function HomePage() {
           </div>
 
           {/* Kartu Kaca Jam Pelayanan Hari Ini */}
-          <div className="mt-10 sm:mt-12 w-full max-w-md p-3.5 sm:p-4 rounded-2xl bg-emerald-900/60 backdrop-blur-md border border-white/20 text-white shadow-xl flex items-center justify-between gap-3 text-left">
+          <div className="mt-10 sm:mt-12 w-full max-w-md p-3.5 sm:p-4 rounded-2xl bg-emerald-900/70 backdrop-blur-md border border-emerald-700/50 text-white shadow-2xl flex items-center justify-between gap-3 text-left">
             <div className="flex items-center gap-3">
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-inner ${
                   todayStatus.isOpen ? "bg-emerald-500/30 text-emerald-300" : "bg-amber-500/30 text-amber-300"
                 }`}
               >
@@ -149,25 +195,40 @@ export default function HomePage() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-emerald-200">
+                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-200">
                     Pelayanan {todayStatus.dayName}
                   </span>
                   <span
-                    className={`inline-block w-2 h-2 rounded-full ${
-                      todayStatus.isOpen ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
+                    className={`inline-block w-2.5 h-2.5 rounded-full ${
+                      todayStatus.isOpen ? "bg-emerald-400 animate-pulse ring-2 ring-emerald-300/40" : "bg-amber-400"
                     }`}
                   />
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-800 text-emerald-200">
+                    {todayStatus.isOpen ? "Buka Sekarang" : "Tutup"}
+                  </span>
                 </div>
-                <p className="text-sm font-bold text-white">{todayStatus.hours}</p>
+                <p className="text-sm font-black text-white">{todayStatus.hours}</p>
               </div>
             </div>
 
             <Link
               href="/layanan-mandiri"
-              className="text-xs text-amber-300 hover:text-amber-200 font-semibold underline shrink-0"
+              className="text-xs text-amber-300 hover:text-amber-200 font-bold underline shrink-0 flex items-center gap-1"
             >
-              Layanan WA &rarr;
+              <span>Layanan WA</span>
+              <span>&rarr;</span>
             </Link>
+          </div>
+
+          {/* Ticker Statistik Ringkas Bawah Hero */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-emerald-300/90">
+            <span>🏡 3 Dukuh Utama</span>
+            <span>•</span>
+            <span>👥 18 RT & 6 RW</span>
+            <span>•</span>
+            <span>🌾 3.250+ Jiwa Warga</span>
+            <span>•</span>
+            <span>⭐ Sentra Keripik & Reyog</span>
           </div>
         </div>
 
@@ -201,35 +262,39 @@ export default function HomePage() {
           {/* Bento Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {/* Bento Card 1 (Large - 2 cols): Surat Online */}
-            <div className="md:col-span-2 rounded-3xl bg-white dark:bg-emerald-900/30 p-6 sm:p-8 border border-emerald-900/10 dark:border-emerald-800/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
-              <div>
-                <div className="w-14 h-14 rounded-2xl bg-emerald-800 text-white flex items-center justify-center mb-6 shadow-md shadow-emerald-800/20 group-hover:scale-105 transition-transform">
-                  <FileText className="w-7 h-7" />
-                </div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded-full">
+            <div className="md:col-span-2 relative rounded-3xl bg-white dark:bg-emerald-900/40 p-7 sm:p-9 border border-emerald-900/10 dark:border-emerald-700/50 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group overflow-hidden">
+              {/* Corner Ambient Glow */}
+              <div className="absolute -top-10 -right-10 w-44 h-44 bg-emerald-500/10 dark:bg-emerald-400/10 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform" />
+
+              <div className="relative z-10">
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-14 h-14 rounded-2xl bg-emerald-800 dark:bg-emerald-700 text-white flex items-center justify-center shadow-lg shadow-emerald-800/25 group-hover:scale-105 transition-transform">
+                    <FileText className="w-7 h-7" />
+                  </div>
+                  <span className="text-[11px] font-black uppercase tracking-wider text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-emerald-800/60 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-700">
                     Paling Sering Digunakan
                   </span>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black text-emerald-950 dark:text-white">
+
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-black text-emerald-950 dark:text-white tracking-tight">
                   Permohonan Surat Keterangan Online
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
-                  Ajukan Surat Domisili, SKTM, Pengantar KTP/KK, Keterangan Usaha (SKU), dan SKCK tanpa perlu antre di balai desa. Isi data, pantau prosesnya, lalu cetak langsung saat siap.
+                  Ajukan Surat Domisili, SKTM, Pengantar KTP/KK, Keterangan Usaha (SKU), dan SKCK secara mandiri dari rumah. Isi formulir singkat, pantau statusnya, lalu ambil surat fisik resmi berstempel basah di Balai Desa.
                 </p>
 
                 {/* Sub Features Chips */}
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-wrap gap-2 mt-5">
                   {[
                     "Surat Domisili",
                     "SKTM",
                     "Pengantar SKCK",
-                    "Keterangan Usaha",
+                    "Keterangan Usaha (SKU)",
                     "Pengantar KTP/KK",
                   ].map((s) => (
                     <span
                       key={s}
-                      className="text-xs font-medium px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-emerald-950/60 text-gray-700 dark:text-gray-300"
+                      className="text-xs font-bold px-3 py-1 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 border border-emerald-200/60 dark:border-emerald-800/60"
                     >
                       ✓ {s}
                     </span>
@@ -237,95 +302,129 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-gray-100 dark:border-emerald-800/30 flex items-center justify-between">
+              <div className="relative z-10 mt-8 pt-6 border-t border-gray-100 dark:border-emerald-800/40 flex flex-wrap items-center justify-between gap-3">
                 <Link
                   href="/surat"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm shadow-xs transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all active:scale-98"
                 >
                   <span>Mulai Isi Form Surat</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
-                  href="/surat/saya"
-                  className="text-xs font-semibold text-emerald-800 dark:text-emerald-300 hover:underline"
+                  href="/lacak"
+                  className="text-xs font-bold text-emerald-800 dark:text-emerald-300 hover:text-emerald-900 underline flex items-center gap-1"
                 >
-                  Lihat Surat Saya &rarr;
+                  <span>Lacak Status Permohonan</span>
+                  <span>&rarr;</span>
                 </Link>
               </div>
             </div>
 
             {/* Bento Card 2: Pengaduan Warga */}
-            <div className="rounded-3xl bg-white dark:bg-emerald-900/30 p-6 sm:p-7 border border-emerald-900/10 dark:border-emerald-800/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-amber-500 text-emerald-950 flex items-center justify-center mb-5 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform">
+            <div className="relative rounded-3xl bg-white dark:bg-emerald-900/40 p-7 border border-emerald-900/10 dark:border-emerald-700/50 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group overflow-hidden">
+              {/* Corner Glow */}
+              <div className="absolute -top-10 -right-10 w-36 h-36 bg-amber-500/10 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform" />
+
+              <div className="relative z-10">
+                <div className="w-13 h-13 rounded-2xl bg-amber-400 text-emerald-950 flex items-center justify-center mb-5 shadow-lg shadow-amber-500/25 group-hover:scale-105 transition-transform">
                   <MessageSquareWarning className="w-6 h-6 stroke-[2.5]" />
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-900 dark:text-amber-200 bg-amber-100 dark:bg-amber-950/60 px-2.5 py-0.5 rounded-full">
+                    Respon Cepat
+                  </span>
                 </div>
                 <h3 className="text-lg sm:text-xl font-black text-emerald-950 dark:text-white">
                   Pengaduan & Aspirasi
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">
-                  Lapor jalan rusak, lampu PJU mati, saluran air tersumbat, atau keluhan layanan. Tersedia opsi kirim anonim.
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">
+                  Lapor jalan rusak, lampu PJU mati, saluran air tersumbat, atau keluhan layanan publik desa secara aman dan privat.
                 </p>
               </div>
 
-              <div className="mt-6 pt-5 border-t border-gray-100 dark:border-emerald-800/30">
+              <div className="relative z-10 mt-6 pt-5 border-t border-gray-100 dark:border-emerald-800/40">
                 <Link
                   href="/pengaduan"
-                  className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 text-amber-900 dark:text-amber-200 font-bold text-sm transition-colors border border-amber-200/50"
+                  className="inline-flex items-center justify-between w-full px-4 py-3 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/50 text-amber-950 dark:text-amber-200 font-black text-xs sm:text-sm transition-colors border border-amber-200/60"
                 >
-                  <span>Kirim Laporan</span>
+                  <span>Sampaikan Aduan</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
 
             {/* Bento Card 3: Layanan Mandiri WhatsApp */}
-            <div className="rounded-3xl bg-white dark:bg-emerald-900/30 p-6 sm:p-7 border border-emerald-900/10 dark:border-emerald-800/40 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mb-5 shadow-md shadow-emerald-600/20 group-hover:scale-105 transition-transform">
+            <div className="relative rounded-3xl bg-white dark:bg-emerald-900/40 p-7 border border-emerald-900/10 dark:border-emerald-700/50 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group overflow-hidden">
+              {/* Corner Glow */}
+              <div className="absolute -top-10 -right-10 w-36 h-36 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform" />
+
+              <div className="relative z-10">
+                <div className="w-13 h-13 rounded-2xl bg-emerald-600 text-white flex items-center justify-center mb-5 shadow-lg shadow-emerald-600/25 group-hover:scale-105 transition-transform">
                   <PhoneForwarded className="w-6 h-6" />
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 dark:text-emerald-200 bg-emerald-100 dark:bg-emerald-900/60 px-2.5 py-0.5 rounded-full">
+                    6 Layanan Cepat
+                  </span>
                 </div>
                 <h3 className="text-lg sm:text-xl font-black text-emerald-950 dark:text-white">
                   Layanan Mandiri WhatsApp
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">
-                  Satu-ketuk terhubung ke WhatsApp kantor desa dengan pesan otomatis siap kirim. Cepat dan bebas ribet.
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">
+                  Konsultasi jam buka pamong, syarat KK/KTP, bantuan sosial PKH, hingga darurat desa 24 jam lewat pesan terformat siap kirim.
                 </p>
               </div>
 
-              <div className="mt-6 pt-5 border-t border-gray-100 dark:border-emerald-800/30">
+              <div className="relative z-10 mt-6 pt-5 border-t border-gray-100 dark:border-emerald-800/40">
                 <Link
                   href="/layanan-mandiri"
-                  className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/60 text-emerald-900 dark:text-emerald-200 font-bold text-sm transition-colors border border-emerald-200/50"
+                  className="inline-flex items-center justify-between w-full px-4 py-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/60 text-emerald-900 dark:text-emerald-200 font-black text-xs sm:text-sm transition-colors border border-emerald-200/60"
                 >
-                  <span>Buka Menu WA</span>
+                  <span>Buka Menu WhatsApp</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
 
             {/* Bento Card 4 (Full width banner / Lacak Berkas Cepat): */}
-            <div className="md:col-span-3 lg:col-span-4 rounded-3xl bg-gradient-to-r from-emerald-900 to-emerald-950 text-white p-6 sm:p-8 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6 border border-emerald-800">
-              <div className="space-y-2 text-center md:text-left">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-800/70 text-amber-300 text-xs font-bold">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Pelacakan Real-Time</span>
+            <div className="md:col-span-3 lg:col-span-4 rounded-3xl bg-gradient-to-r from-emerald-900 via-emerald-900 to-emerald-950 text-white p-6 sm:p-8 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-6 border border-emerald-700/60">
+              <div className="space-y-2 text-center lg:text-left">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-800/80 text-amber-300 text-xs font-bold border border-emerald-700">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Pelacakan Mandiri & Cepat</span>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-black">
                   Sudah Mengajukan Surat atau Pengaduan?
                 </h3>
-                <p className="text-sm text-emerald-200/90 max-w-xl">
-                  Gunakan kode tiket permohonan Anda (contoh: <code className="bg-emerald-800/80 px-2 py-0.5 rounded text-amber-300 font-mono">SRT-2026-0001</code> atau <code className="bg-emerald-800/80 px-2 py-0.5 rounded text-amber-300 font-mono">PGD-2026-0001</code>) untuk mengetahui tahapan berkas.
+                <p className="text-xs sm:text-sm text-emerald-200/90 max-w-xl leading-relaxed">
+                  Pantau perkembangan surat atau tindak lanjut aduan Anda secara real-time. Ketik kode tiket di samping untuk melihat status langsung:
                 </p>
               </div>
 
-              <Link
-                href="/lacak"
-                className="shrink-0 px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-emerald-950 font-extrabold text-sm shadow-md transition-all active:scale-98 flex items-center gap-2"
+              {/* Direct Quick Search Form */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!trackCode.trim()) return;
+                  router.push(`/lacak?kode=${encodeURIComponent(trackCode.trim())}`);
+                }}
+                className="flex flex-col sm:flex-row items-center gap-2 bg-emerald-950/80 p-2 rounded-2xl border border-emerald-700/60 w-full lg:w-auto"
               >
-                <span>Lacak Berkas Sekarang</span>
-                <ChevronRight className="w-4 h-4" />
-              </Link>
+                <input
+                  type="text"
+                  value={trackCode}
+                  onChange={(e) => setTrackCode(e.target.value)}
+                  placeholder="Contoh: SRT-2026-0001"
+                  className="w-full sm:w-64 px-4 py-2.5 rounded-xl bg-white/10 text-white text-xs sm:text-sm font-mono placeholder:text-emerald-300/50 border border-white/10 focus:outline-hidden focus:border-amber-400"
+                />
+                <button
+                  type="submit"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-black text-xs sm:text-sm shadow-md transition-all active:scale-95 shrink-0 flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <span>Cek Status</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -379,10 +478,10 @@ export default function HomePage() {
                 3
               </div>
               <h3 className="text-lg font-extrabold text-emerald-950 dark:text-white">
-                Notifikasi & Pengambilan
+                Ambil Surat di Balai Desa
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 leading-relaxed">
-                Dapatkan notifikasi di website begitu surat siap. Surat dapat langsung dicetak online atau diambil di kantor desa.
+                Pamong desa akan mengirim kabar via WhatsApp saat surat telah siap. Warga cukup datang ke Balai Desa Karangwaluh untuk mengambil surat fisik resmi berstempel basah.
               </p>
             </div>
           </div>
@@ -406,7 +505,7 @@ export default function HomePage() {
                 <span>Sekilas Profil Desa</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
-                Mengenal Lebih Dekat {villageConfig.name}
+                Mengenal Lebih Dekat {config.name}
               </h2>
               <p className="text-sm sm:text-base text-emerald-200/90 leading-relaxed">
                 Desa Karangwaluh merupakan salah satu dari 12 desa berdaya di Kecamatan Sampung, Kabupaten Ponorogo, Jawa Timur. Terkenal dengan keramahan warganya, udara perbukitan yang segar, panorama persawahan hijau, dan potensi UMKM olahan lokal seperti keripik dan madu murni.
@@ -420,10 +519,10 @@ export default function HomePage() {
                     Kepemimpinan Desa
                   </p>
                   <p className="text-base font-extrabold text-white">
-                    {villageConfig.headOfVillage.name}
+                    {config.headOfVillage.name}
                   </p>
                   <p className="text-xs text-emerald-200">
-                    {villageConfig.headOfVillage.title} ({villageConfig.headOfVillage.period})
+                    {config.headOfVillage.title} ({config.headOfVillage.period})
                   </p>
                 </div>
               </div>
@@ -432,75 +531,75 @@ export default function HomePage() {
             {/* Right animated counter grid */}
             <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
               {/* Stat 1: Penduduk */}
-              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/50 backdrop-blur-xs border border-emerald-700/40 text-center hover:bg-emerald-900/70 transition-colors">
+              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/60 backdrop-blur-md border border-emerald-700/50 text-center hover:bg-emerald-900/80 hover:-translate-y-1 transition-all duration-300 shadow-lg">
                 <Users className="w-6 h-6 text-amber-400 mx-auto mb-2" />
-                <div className="text-3xl sm:text-4xl font-black text-white">
-                  <StatCounter end={villageConfig.statistics.population} suffix="+" />
+                <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-amber-300 via-amber-200 to-white bg-clip-text text-transparent">
+                  <StatCounter end={config.statistics.population} suffix="+" />
                 </div>
-                <p className="text-xs sm:text-sm text-emerald-200 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-emerald-200 font-bold mt-1">
                   Jumlah Penduduk (Jiwa)
                 </p>
-                <span className="text-[10px] text-emerald-400 block mt-1">Data BPS Sampung</span>
+                <span className="text-[10px] text-emerald-400/90 font-medium block mt-1">Data Kependudukan Desa</span>
               </div>
 
               {/* Stat 2: Luas Wilayah */}
-              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/50 backdrop-blur-xs border border-emerald-700/40 text-center hover:bg-emerald-900/70 transition-colors">
+              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/60 backdrop-blur-md border border-emerald-700/50 text-center hover:bg-emerald-900/80 hover:-translate-y-1 transition-all duration-300 shadow-lg">
                 <MapPin className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
-                <div className="text-3xl sm:text-4xl font-black text-white">
-                  <StatCounter end={villageConfig.statistics.areaKm2} suffix=" km²" />
+                <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-amber-300 via-amber-200 to-white bg-clip-text text-transparent">
+                  <StatCounter end={config.statistics.areaKm2} suffix=" km²" />
                 </div>
-                <p className="text-xs sm:text-sm text-emerald-200 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-emerald-200 font-bold mt-1">
                   Luas Wilayah Desa
                 </p>
-                <span className="text-[10px] text-emerald-400 block mt-1">Kecamatan Sampung</span>
+                <span className="text-[10px] text-emerald-400/90 font-medium block mt-1">Kecamatan Sampung</span>
               </div>
 
               {/* Stat 3: Kepala Keluarga */}
-              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/50 backdrop-blur-xs border border-emerald-700/40 text-center hover:bg-emerald-900/70 transition-colors">
+              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/60 backdrop-blur-md border border-emerald-700/50 text-center hover:bg-emerald-900/80 hover:-translate-y-1 transition-all duration-300 shadow-lg">
                 <Building2 className="w-6 h-6 text-amber-400 mx-auto mb-2" />
-                <div className="text-3xl sm:text-4xl font-black text-white">
-                  <StatCounter end={villageConfig.statistics.families} suffix="" />
+                <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-amber-300 via-amber-200 to-white bg-clip-text text-transparent">
+                  <StatCounter end={config.statistics.families} suffix="" />
                 </div>
-                <p className="text-xs sm:text-sm text-emerald-200 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-emerald-200 font-bold mt-1">
                   Kepala Keluarga (KK)
                 </p>
-                <span className="text-[10px] text-emerald-400 block mt-1">Komunitas Rukun</span>
+                <span className="text-[10px] text-emerald-400/90 font-medium block mt-1">Komunitas Rukun</span>
               </div>
 
               {/* Stat 4: Rukun Tetangga */}
-              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/50 backdrop-blur-xs border border-emerald-700/40 text-center hover:bg-emerald-900/70 transition-colors">
+              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/60 backdrop-blur-md border border-emerald-700/50 text-center hover:bg-emerald-900/80 hover:-translate-y-1 transition-all duration-300 shadow-lg">
                 <Compass className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
-                <div className="text-3xl sm:text-4xl font-black text-white">
-                  <StatCounter end={villageConfig.statistics.neighborhoodUnits} suffix=" RT" />
+                <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-amber-300 via-amber-200 to-white bg-clip-text text-transparent">
+                  <StatCounter end={config.statistics.neighborhoodUnits} suffix=" RT" />
                 </div>
-                <p className="text-xs sm:text-sm text-emerald-200 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-emerald-200 font-bold mt-1">
                   Rukun Tetangga (RT)
                 </p>
-                <span className="text-[10px] text-emerald-400 block mt-1">Dalam 3 Dukuh</span>
+                <span className="text-[10px] text-emerald-400/90 font-medium block mt-1">Dalam 3 Dukuh</span>
               </div>
 
               {/* Stat 5: Rukun Warga */}
-              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/50 backdrop-blur-xs border border-emerald-700/40 text-center hover:bg-emerald-900/70 transition-colors">
+              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/60 backdrop-blur-md border border-emerald-700/50 text-center hover:bg-emerald-900/80 hover:-translate-y-1 transition-all duration-300 shadow-lg">
                 <ShieldCheck className="w-6 h-6 text-amber-400 mx-auto mb-2" />
-                <div className="text-3xl sm:text-4xl font-black text-white">
-                  <StatCounter end={villageConfig.statistics.citizenUnits} suffix=" RW" />
+                <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-amber-300 via-amber-200 to-white bg-clip-text text-transparent">
+                  <StatCounter end={config.statistics.citizenUnits} suffix=" RW" />
                 </div>
-                <p className="text-xs sm:text-sm text-emerald-200 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-emerald-200 font-bold mt-1">
                   Rukun Warga (RW)
                 </p>
-                <span className="text-[10px] text-emerald-400 block mt-1">Koordinasi Wilayah</span>
+                <span className="text-[10px] text-emerald-400/90 font-medium block mt-1">Koordinasi Wilayah</span>
               </div>
 
               {/* Stat 6: UMKM Aktif */}
-              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/50 backdrop-blur-xs border border-emerald-700/40 text-center hover:bg-emerald-900/70 transition-colors">
+              <div className="p-5 sm:p-6 rounded-3xl bg-emerald-900/60 backdrop-blur-md border border-emerald-700/50 text-center hover:bg-emerald-900/80 hover:-translate-y-1 transition-all duration-300 shadow-lg">
                 <Store className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
-                <div className="text-3xl sm:text-4xl font-black text-white">
-                  <StatCounter end={villageConfig.statistics.activeUmkm} suffix="+" />
+                <div className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-amber-300 via-amber-200 to-white bg-clip-text text-transparent">
+                  <StatCounter end={config.statistics.activeUmkm} suffix="+" />
                 </div>
-                <p className="text-xs sm:text-sm text-emerald-200 font-semibold mt-1">
+                <p className="text-xs sm:text-sm text-emerald-200 font-bold mt-1">
                   Sentra UMKM Aktif
                 </p>
-                <span className="text-[10px] text-emerald-400 block mt-1">Olahan Pangan & Kriya</span>
+                <span className="text-[10px] text-emerald-400/90 font-medium block mt-1">Olahan Pangan & Kriya</span>
               </div>
             </div>
           </div>
@@ -523,7 +622,7 @@ export default function HomePage() {
           </div>
 
           {/* Interactive Lightbox Component */}
-          <GalleryLightbox items={villageGallery} />
+          <GalleryLightbox items={gallery} />
         </div>
       </section>
 
@@ -543,7 +642,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {localProducts.map((product) => {
+            {products.map((product) => {
               const waUrl = formatWhatsAppUrl(product.whatsappNumber, product.orderMessage);
               return (
                 <div
@@ -599,6 +698,18 @@ export default function HomePage() {
               );
             })}
           </div>
+
+          {/* Link to Full Catalog */}
+          <div className="mt-12 text-center">
+            <Link
+              href="/umkm"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm shadow-md transition-all active:scale-98"
+            >
+              <Store className="w-4 h-4 text-amber-300" />
+              <span>Buka Seluruh Katalog Produk UMKM</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -620,7 +731,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {villageNews.map((news) => (
+            {newsList.map((news) => (
               <div
                 key={news.id}
                 className="p-6 rounded-3xl bg-emerald-50/40 dark:bg-emerald-900/20 border border-emerald-900/10 dark:border-emerald-800/30 flex flex-col justify-between hover:shadow-lg transition-all"
@@ -676,7 +787,7 @@ export default function HomePage() {
                   <div>
                     <h4 className="text-sm font-bold text-emerald-950 dark:text-white">Alamat Resmi</h4>
                     <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-0.5">
-                      {villageConfig.address}
+                      {config.address}
                     </p>
                     <p className="text-xs text-emerald-800 dark:text-emerald-300 font-mono mt-1">
                       Koordinat: 7°51′24″ S, 111°21′07″ E
@@ -689,10 +800,10 @@ export default function HomePage() {
                   <div>
                     <h4 className="text-sm font-bold text-emerald-950 dark:text-white">Jam Buka Kantor</h4>
                     <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-0.5">
-                      {villageConfig.serviceHours.weekdays}
+                      {config.serviceHours.weekdays}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {villageConfig.serviceHours.friday}
+                      {config.serviceHours.friday}
                     </p>
                   </div>
                 </div>
@@ -700,7 +811,7 @@ export default function HomePage() {
 
               <div className="flex flex-wrap gap-3">
                 <a
-                  href={villageConfig.coordinates.googleMapsUrl}
+                  href={config.coordinates.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm shadow-xs transition-all active:scale-98"
@@ -723,7 +834,7 @@ export default function HomePage() {
                   scrolling="no"
                   marginHeight={0}
                   marginWidth={0}
-                  src={villageConfig.coordinates.embedMapUrl}
+                  src={config.coordinates.embedMapUrl}
                   className="w-full h-full"
                 />
                 <div className="absolute bottom-3 left-3 bg-white/90 dark:bg-emerald-950/90 backdrop-blur-xs px-3 py-1.5 rounded-xl text-xs font-semibold text-emerald-950 dark:text-white shadow-md flex items-center gap-2">

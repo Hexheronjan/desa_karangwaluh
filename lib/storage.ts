@@ -7,12 +7,27 @@ import {
   ComplaintCategory,
   LetterType,
 } from "./types";
+import {
+  villageConfig,
+  localProducts,
+  villageNews,
+  villageGallery,
+  VillageConfig,
+  ProductUmkm,
+  NewsItem,
+  GalleryItem,
+} from "./config";
 
 const STORAGE_KEYS = {
   COMPLAINTS: "karangwaluh_demo_complaints_v1",
   LETTERS: "karangwaluh_demo_letters_v1",
   NOTIFICATIONS: "karangwaluh_demo_notifications_v1",
-  INITIALIZED: "karangwaluh_demo_initialized_v1",
+  CONFIG: "karangwaluh_demo_config_v1",
+  PRODUCTS: "karangwaluh_demo_products_v1",
+  GALLERY: "karangwaluh_demo_gallery_v1",
+  NEWS: "karangwaluh_demo_news_v1",
+  AUTH_SESSION: "karangwaluh_demo_auth_session_v1",
+  INITIALIZED: "karangwaluh_demo_initialized_v2",
 };
 
 // Safe localStorage helper
@@ -89,7 +104,7 @@ const initialLetters: LetterRequest[] = [
       phone: "081398765432",
     },
     status: "Siap Diambil",
-    officerNote: "Surat sudah ditandatangani Kepala Desa dan dibubuhi stempel resmi. Silakan diambil di Balai Desa atau unduh cetak digital.",
+    officerNote: "Surat fisik resmi sudah ditandatangani Kepala Desa dan dibubuhi stempel basah. Silakan diambil langsung di Meja Pelayanan Balai Desa Karangwaluh pada jam kerja.",
     history: [
       {
         status: "Diajukan",
@@ -120,10 +135,10 @@ const initialNotifications: VillageNotification[] = [
   {
     id: "notif-1",
     title: "Surat Selesai: Surat Keterangan Domisili",
-    message: "Permohonan surat kode SRT-2026-0001 atas nama Siti Rahmawati berstatus SIAP DIAMBIL di Balai Desa atau dicetak online.",
+    message: "Permohonan surat kode SRT-2026-0001 berstatus SIAP DIAMBIL langsung di Balai Desa Karangwaluh.",
     type: "surat",
     relatedId: "SRT-2026-0001",
-    link: "/surat/saya",
+    link: "/lacak?kode=SRT-2026-0001",
     timestamp: "2026-10-15T10:30:00.000Z",
     isRead: false,
   },
@@ -152,13 +167,60 @@ const initialNotifications: VillageNotification[] = [
 export function initVillageStorage(): void {
   if (typeof window === "undefined") return;
   try {
-    const isInit = window.localStorage.getItem(STORAGE_KEYS.INITIALIZED);
-    if (!isInit) {
+    if (!window.localStorage.getItem(STORAGE_KEYS.COMPLAINTS)) {
       window.localStorage.setItem(STORAGE_KEYS.COMPLAINTS, JSON.stringify(initialComplaints));
-      window.localStorage.setItem(STORAGE_KEYS.LETTERS, JSON.stringify(initialLetters));
-      window.localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(initialNotifications));
-      window.localStorage.setItem(STORAGE_KEYS.INITIALIZED, "true");
     }
+    if (!window.localStorage.getItem(STORAGE_KEYS.LETTERS)) {
+      window.localStorage.setItem(STORAGE_KEYS.LETTERS, JSON.stringify(initialLetters));
+    } else {
+      // Auto-migrate: remove any old "unduh cetak digital" notes from user's browser
+      const existing = window.localStorage.getItem(STORAGE_KEYS.LETTERS);
+      if (existing && existing.includes("unduh cetak digital")) {
+        try {
+          const parsed: LetterRequest[] = JSON.parse(existing);
+          const sanitized = parsed.map((item) => {
+            if (item.officerNote && item.officerNote.includes("unduh cetak digital")) {
+              return {
+                ...item,
+                officerNote: "Surat fisik resmi sudah ditandatangani Kepala Desa dan dibubuhi stempel basah. Silakan diambil langsung di Meja Pelayanan Balai Desa Karangwaluh pada jam kerja.",
+              };
+            }
+            return item;
+          });
+          window.localStorage.setItem(STORAGE_KEYS.LETTERS, JSON.stringify(sanitized));
+        } catch {}
+      }
+    }
+    if (!window.localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS)) {
+      window.localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(initialNotifications));
+    } else {
+      // Auto-migrate: redirect any old /surat/saya links or cetak online in notifications
+      const notifs = window.localStorage.getItem(STORAGE_KEYS.NOTIFICATIONS);
+      if (notifs && (notifs.includes("/surat/saya") || notifs.includes("cetak online"))) {
+        try {
+          const parsedNotifs = JSON.parse(notifs);
+          const cleanedNotifs = parsedNotifs.map((n: VillageNotification) => ({
+            ...n,
+            link: n.link === "/surat/saya" ? (n.relatedId ? `/lacak?kode=${n.relatedId}` : "/lacak") : n.link,
+            message: n.message.replace(" atau dicetak online", "").replace(" atau cetak online", "").replace(" Silakan cetak online atau", " Silakan"),
+          }));
+          window.localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(cleanedNotifs));
+        } catch {}
+      }
+    }
+    if (!window.localStorage.getItem(STORAGE_KEYS.CONFIG)) {
+      window.localStorage.setItem(STORAGE_KEYS.CONFIG, JSON.stringify(villageConfig));
+    }
+    if (!window.localStorage.getItem(STORAGE_KEYS.PRODUCTS)) {
+      window.localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(localProducts));
+    }
+    if (!window.localStorage.getItem(STORAGE_KEYS.GALLERY)) {
+      window.localStorage.setItem(STORAGE_KEYS.GALLERY, JSON.stringify(villageGallery));
+    }
+    if (!window.localStorage.getItem(STORAGE_KEYS.NEWS)) {
+      window.localStorage.setItem(STORAGE_KEYS.NEWS, JSON.stringify(villageNews));
+    }
+    window.localStorage.setItem(STORAGE_KEYS.INITIALIZED, "true");
   } catch (e) {
     console.error("Gagal inisialisasi storage:", e);
   }
@@ -319,7 +381,7 @@ export function createLetter(data: {
     message: `Permohonan ${data.letterType} berhasil diajukan atas nama ${data.applicant.name}.`,
     type: "surat",
     relatedId: id,
-    link: `/surat/saya`,
+    link: `/lacak?kode=${id}`,
   });
 
   return newLetter;
@@ -365,11 +427,11 @@ export function updateLetterStatus(
         : `Update Permohonan Surat: ${id}`,
     message:
       newStatus === "Siap Diambil"
-        ? `Surat ${item.letterType} (${id}) telah selesai dibuat dan ditandatangani. Silakan cetak online atau ambil di kantor desa.`
+        ? `Surat ${item.letterType} (${id}) telah selesai dibuat dan ditandatangani Kepala Desa. Silakan ambil fisik surat resmi di Balai Desa Karangwaluh.`
         : `Status surat (${id}) kini: ${newStatus.toUpperCase()}${officerNote ? ` ("${officerNote}")` : ""}`,
     type: "surat",
     relatedId: id,
-    link: `/surat/saya`,
+    link: `/lacak?kode=${id}`,
   });
 
   return item;
@@ -422,11 +484,195 @@ export function getUnreadNotificationCount(): number {
   return list.filter((n) => !n.isRead).length;
 }
 
+// ==========================================
+// VILLAGE CONFIG & CONTACT CMS API
+// ==========================================
+export function getStoredVillageConfig(): VillageConfig {
+  initVillageStorage();
+  return safeGet<VillageConfig>(STORAGE_KEYS.CONFIG, villageConfig);
+}
+
+export function updateStoredVillageConfig(updates: Partial<VillageConfig>): VillageConfig {
+  const current = getStoredVillageConfig();
+  const updated: VillageConfig = {
+    ...current,
+    ...updates,
+    contact: {
+      ...current.contact,
+      ...(updates.contact || {}),
+    },
+    headOfVillage: {
+      ...current.headOfVillage,
+      ...(updates.headOfVillage || {}),
+    },
+    serviceHours: {
+      ...current.serviceHours,
+      ...(updates.serviceHours || {}),
+    },
+    statistics: {
+      ...current.statistics,
+      ...(updates.statistics || {}),
+    },
+  };
+  safeSet(STORAGE_KEYS.CONFIG, updated);
+  return updated;
+}
+
+// ==========================================
+// PRODUK UMKM CMS API
+// ==========================================
+export function getStoredProducts(): ProductUmkm[] {
+  initVillageStorage();
+  return safeGet<ProductUmkm[]>(STORAGE_KEYS.PRODUCTS, localProducts);
+}
+
+export function addProductUmkm(data: Omit<ProductUmkm, "id">): ProductUmkm {
+  const list = getStoredProducts();
+  const newProduct: ProductUmkm = {
+    ...data,
+    id: `umkm-${Date.now()}`,
+  };
+  const updated = [newProduct, ...list];
+  safeSet(STORAGE_KEYS.PRODUCTS, updated);
+  return newProduct;
+}
+
+export function deleteProductUmkm(id: string): boolean {
+  const list = getStoredProducts();
+  const updated = list.filter((p) => p.id !== id);
+  return safeSet(STORAGE_KEYS.PRODUCTS, updated);
+}
+
+// ==========================================
+// FOTO GALERI DESA CMS API
+// ==========================================
+export function getStoredGallery(): GalleryItem[] {
+  initVillageStorage();
+  return safeGet<GalleryItem[]>(STORAGE_KEYS.GALLERY, villageGallery);
+}
+
+export function addGalleryItem(data: Omit<GalleryItem, "id">): GalleryItem {
+  const list = getStoredGallery();
+  const newItem: GalleryItem = {
+    ...data,
+    id: `gal-${Date.now()}`,
+  };
+  const updated = [newItem, ...list];
+  safeSet(STORAGE_KEYS.GALLERY, updated);
+  return newItem;
+}
+
+export function deleteGalleryItem(id: string): boolean {
+  const list = getStoredGallery();
+  const updated = list.filter((g) => g.id !== id);
+  return safeSet(STORAGE_KEYS.GALLERY, updated);
+}
+
+// ==========================================
+// PENGUMUMAN & AGENDA DESA CMS API
+// ==========================================
+export function getStoredNews(): NewsItem[] {
+  initVillageStorage();
+  return safeGet<NewsItem[]>(STORAGE_KEYS.NEWS, villageNews);
+}
+
+export function addVillageNews(data: Omit<NewsItem, "id">): NewsItem {
+  const list = getStoredNews();
+  const newItem: NewsItem = {
+    ...data,
+    id: `berita-${Date.now()}`,
+  };
+  const updated = [newItem, ...list];
+  safeSet(STORAGE_KEYS.NEWS, updated);
+  return newItem;
+}
+
+export function deleteVillageNews(id: string): boolean {
+  const list = getStoredNews();
+  const updated = list.filter((n) => n.id !== id);
+  return safeSet(STORAGE_KEYS.NEWS, updated);
+}
+
+// ==========================================
+// OFFICER AUTHENTICATION API
+// ==========================================
+export interface OfficerSession {
+  username: string;
+  name: string;
+  role: string;
+  loggedInAt: string;
+}
+
+export function getOfficerSession(): OfficerSession | null {
+  return safeGet<OfficerSession | null>(STORAGE_KEYS.AUTH_SESSION, null);
+}
+
+export function isOfficerAuthenticated(): boolean {
+  return !!getOfficerSession();
+}
+
+export function loginOfficer(
+  username: string,
+  password: string
+): { success: boolean; message: string; session?: OfficerSession } {
+  const u = username.trim().toLowerCase();
+  const p = password.trim();
+
+  // Daftar akun demo yang didukung
+  const validAccounts = [
+    { u: "admin", p: "admin123", name: "Administrator Balai Desa", role: "Super Admin Desa" },
+    { u: "operator", p: "karangwaluh", name: "Operator Pelayanan Desa", role: "Operator Pelayanan" },
+    { u: "petugas", p: "desa2026", name: "Petugas Pelayanan Warga", role: "Staf Pamong Desa" },
+  ];
+
+  const matched = validAccounts.find((acc) => acc.u === u && acc.p === p);
+
+  if (matched) {
+    const session: OfficerSession = {
+      username: matched.u,
+      name: matched.name,
+      role: matched.role,
+      loggedInAt: new Date().toISOString(),
+    };
+    safeSet(STORAGE_KEYS.AUTH_SESSION, session);
+    return {
+      success: true,
+      message: `Selamat datang, ${matched.name}! Mengalihkan ke panel operator...`,
+      session,
+    };
+  }
+
+  return {
+    success: false,
+    message: "Username atau kata sandi tidak cocok. Silakan gunakan kredensial demo yang disediakan.",
+  };
+}
+
+export function logoutOfficer(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(STORAGE_KEYS.AUTH_SESSION);
+    window.dispatchEvent(
+      new CustomEvent("village-storage-update", { detail: { key: STORAGE_KEYS.AUTH_SESSION } })
+    );
+  } catch (e) {
+    console.error("Gagal logout:", e);
+  }
+}
+
+// ==========================================
+// RESET DEMO DATA
+// ==========================================
 export function resetDemoData(): void {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(STORAGE_KEYS.COMPLAINTS, JSON.stringify(initialComplaints));
   window.localStorage.setItem(STORAGE_KEYS.LETTERS, JSON.stringify(initialLetters));
   window.localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify(initialNotifications));
+  window.localStorage.setItem(STORAGE_KEYS.CONFIG, JSON.stringify(villageConfig));
+  window.localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(localProducts));
+  window.localStorage.setItem(STORAGE_KEYS.GALLERY, JSON.stringify(villageGallery));
+  window.localStorage.setItem(STORAGE_KEYS.NEWS, JSON.stringify(villageNews));
+  window.localStorage.removeItem(STORAGE_KEYS.AUTH_SESSION);
   window.localStorage.setItem(STORAGE_KEYS.INITIALIZED, "true");
   window.dispatchEvent(new CustomEvent("village-storage-update", { detail: { reset: true } }));
 }

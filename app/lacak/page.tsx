@@ -18,10 +18,11 @@ import {
   User,
   Printer,
   ChevronRight,
+  Building2,
 } from "lucide-react";
 import { getComplaintById, getLetterById } from "@/lib/storage";
 import { ComplaintTicket, LetterRequest } from "@/lib/types";
-import { formatDateIndo } from "@/lib/utils";
+import { formatDateIndo, maskNik, maskName, maskPhone } from "@/lib/utils";
 
 function LacakContent() {
   const searchParams = useSearchParams();
@@ -319,11 +320,20 @@ function LacakContent() {
                   {letterResult.letterType}
                 </h2>
                 <p className="text-xs font-mono text-emerald-800 dark:text-emerald-300 mt-0.5 font-bold">
-                  Kode: {letterResult.id}
+                  Kode Registrasi: {letterResult.id}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Pemohon: <strong>{letterResult.applicant.name}</strong> (NIK: {letterResult.applicant.nik})
-                </p>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  <span>
+                    Pemohon: <strong className="text-gray-800 dark:text-gray-200">{maskName(letterResult.applicant.name)}</strong>
+                  </span>
+                  <span>•</span>
+                  <span>
+                    NIK: <strong className="font-mono text-gray-800 dark:text-gray-200">{maskNik(letterResult.applicant.nik)}</strong>
+                  </span>
+                  <span className="text-[10px] text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-200/50">
+                    🔒 Data Pribadi Tersensor
+                  </span>
+                </div>
               </div>
 
               <div className="text-right">
@@ -386,29 +396,37 @@ function LacakContent() {
                     Pemberitahuan Pamong Desa:
                   </h4>
                   <p className="text-sm mt-1 leading-relaxed font-medium">
-                    "{letterResult.officerNote}"
+                    "{letterResult.officerNote.replace(/atau unduh cetak digital\.?/gi, "pada jam kerja kantor desa.")}"
                   </p>
                 </div>
               )}
 
-              {/* Action Button: Jika surat sudah Siap Diambil */}
+              {/* Petunjuk Pengambilan Fisik: Jika surat sudah Siap Diambil */}
               {letterResult.status === "Siap Diambil" && (
-                <div className="p-5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <div>
-                    <h4 className="text-base font-extrabold text-amber-900 dark:text-amber-200">
-                      Surat Telah Siap Dicetak!
+                <div className="p-5 sm:p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border-2 border-emerald-500/40 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-200 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-100 text-xs font-bold">
+                      <Building2 className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-300" />
+                      <span>Surat Fisik Siap Diambil</span>
+                    </div>
+                    <h4 className="text-base sm:text-lg font-black text-emerald-950 dark:text-white mt-1">
+                      Silakan Ambil Dokumen di Balai Desa
                     </h4>
-                    <p className="text-xs text-amber-800/80 dark:text-amber-300 mt-0.5">
-                      Nomor Surat Resmi: <span className="font-mono font-bold">{letterResult.officialNumber || "470/12/405.29.11/2026"}</span>
+                    <p className="text-xs text-gray-600 dark:text-gray-300">
+                      Surat fisik resmi telah selesai dicetak, ditandatangani Kepala Desa, dan dibubuhi stempel basah resmi.
                     </p>
+                    <div className="pt-2 text-xs text-emerald-900 dark:text-emerald-200 font-semibold space-y-0.5">
+                      <p>📍 <strong>Lokasi:</strong> Meja Pelayanan Kantor Balai Desa Karangwaluh</p>
+                      <p>🕒 <strong>Jam Layanan:</strong> Senin – Kamis (08.00 – 15.00 WIB) | Jumat (08.00 – 14.30 WIB)</p>
+                      <p>🔖 <strong>No. Registrasi:</strong> <span className="font-mono font-bold text-amber-700 dark:text-amber-300">{letterResult.id}</span></p>
+                    </div>
                   </div>
-                  <Link
-                    href={`/surat/cetak/${letterResult.id}`}
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-sm shadow-md transition-all active:scale-98 shrink-0"
-                  >
-                    <Printer className="w-4 h-4" />
-                    <span>Pratinjau & Cetak Surat</span>
-                  </Link>
+                  <div className="shrink-0 w-full sm:w-auto">
+                    <div className="px-4 py-3 rounded-xl bg-amber-400 text-emerald-950 text-xs font-black text-center shadow-xs">
+                      Tunjukkan Kode Permohonan:
+                      <span className="block font-mono text-sm tracking-wide mt-0.5">{letterResult.id}</span>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
@@ -424,7 +442,7 @@ function LacakContent() {
                     <span className="w-2 h-2 rounded-full bg-emerald-600 mt-1.5 shrink-0" />
                     <div>
                       <p className="font-semibold text-gray-800 dark:text-gray-200">
-                        {h.note}
+                        {h.note.replace(/atau unduh cetak digital\.?/gi, "pada jam kerja kantor desa.").replace(/atau cetak online/gi, "")}
                       </p>
                       <p className="text-gray-400 mt-0.5">{formatDateIndo(h.timestamp)}</p>
                     </div>

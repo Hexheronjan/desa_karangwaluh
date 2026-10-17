@@ -14,11 +14,23 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { villageConfig } from "@/lib/config";
+import { getStoredVillageConfig } from "@/lib/storage";
 import { formatWhatsAppUrl } from "@/lib/utils";
 
 export function Footer() {
+  const [config, setConfig] = React.useState(villageConfig);
+
+  React.useEffect(() => {
+    function loadConfig() {
+      setConfig(getStoredVillageConfig());
+    }
+    loadConfig();
+    window.addEventListener("village-storage-update", loadConfig);
+    return () => window.removeEventListener("village-storage-update", loadConfig);
+  }, []);
+
   const waHelpUrl = formatWhatsAppUrl(
-    villageConfig.contact.whatsapp,
+    config.contact.whatsapp,
     "Halo Admin Pelayanan Desa Karangwaluh, saya ingin bertanya tentang layanan desa."
   );
 
@@ -41,10 +53,10 @@ export function Footer() {
               </div>
               <div>
                 <h3 className="font-extrabold text-lg text-white tracking-tight">
-                  {villageConfig.name}
+                  {config.name}
                 </h3>
                 <p className="text-xs text-emerald-300">
-                  {villageConfig.subdistrict}, {villageConfig.regency}
+                  {config.subdistrict}, {config.regency}
                 </p>
               </div>
             </div>
@@ -54,7 +66,7 @@ export function Footer() {
             <div className="pt-1">
               <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-900/80 border border-emerald-700/50 text-xs text-amber-300 font-medium">
                 <ShieldCheck className="w-4 h-4 text-amber-400" />
-                <span>Kepala Desa: {villageConfig.headOfVillage.name}</span>
+                <span>Kepala Desa: {config.headOfVillage.name}</span>
               </span>
             </div>
           </div>
@@ -67,23 +79,23 @@ export function Footer() {
             <div className="space-y-3 text-sm text-emerald-200/90">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span className="leading-snug">{villageConfig.address}</span>
+                <span className="leading-snug">{config.address}</span>
               </div>
               <div className="flex items-start gap-2.5">
                 <Clock className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-white">{villageConfig.serviceHours.weekdays}</p>
-                  <p className="text-xs text-emerald-300/80">{villageConfig.serviceHours.friday}</p>
-                  <p className="text-xs text-amber-300/90 mt-0.5">{villageConfig.serviceHours.weekend}</p>
+                  <p className="font-semibold text-white">{config.serviceHours.weekdays}</p>
+                  <p className="text-xs text-emerald-300/80">{config.serviceHours.friday}</p>
+                  <p className="text-xs text-amber-300/90 mt-0.5">{config.serviceHours.weekend}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Kecamatan: {villageConfig.contact.phone}</span>
+                <span>Kecamatan: {config.contact.phone}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="truncate">{villageConfig.contact.email}</span>
+                <span className="truncate">{config.contact.email}</span>
               </div>
             </div>
           </div>
@@ -99,11 +111,7 @@ export function Footer() {
                   <span>Buat Surat Keterangan Online</span>
                 </Link>
               </li>
-              <li>
-                <Link href="/surat/saya" className="hover:text-amber-300 transition-colors flex items-center gap-1.5">
-                  <span>Daftar Permohonan Surat Saya</span>
-                </Link>
-              </li>
+
               <li>
                 <Link href="/pengaduan" className="hover:text-amber-300 transition-colors flex items-center gap-1.5">
                   <span>Sampaikan Pengaduan Warga</span>
@@ -120,7 +128,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/#produk-umkm" className="hover:text-amber-300 transition-colors flex items-center gap-1.5">
+                <Link href="/umkm" className="hover:text-amber-300 transition-colors flex items-center gap-1.5">
                   <span>Katalog Produk Lokal UMKM</span>
                 </Link>
               </li>
@@ -146,7 +154,7 @@ export function Footer() {
             </a>
             <div className="pt-2">
               <a
-                href={villageConfig.coordinates.googleMapsUrl}
+                href={config.coordinates.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-emerald-300 hover:text-white flex items-center gap-1 underline decoration-emerald-500/50"
@@ -161,15 +169,10 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-emerald-900/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-emerald-400">
           <p>
-            © 2026 {villageConfig.name}, {villageConfig.subdistrict}, {villageConfig.regency}. Hak cipta dilindungi.
+            © 2026 {config.name}, {config.subdistrict}, {config.regency}. Hak cipta dilindungi.
           </p>
-          <div className="flex items-center gap-4">
-            <Link href="/admin-demo" className="text-amber-300 hover:underline flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Simulasi Admin Demo</span>
-            </Link>
-            <span>•</span>
-            <span className="text-emerald-500">Kecamatan Sampung Maju</span>
+          <div className="flex items-center gap-4 text-emerald-400/80">
+            <span>Kecamatan Sampung • Kabupaten Ponorogo</span>
           </div>
         </div>
       </div>

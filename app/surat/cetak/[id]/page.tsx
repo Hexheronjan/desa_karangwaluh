@@ -53,10 +53,10 @@ function CetakSuratContent() {
         <h2 className="text-xl font-bold">Surat Tidak Ditemukan</h2>
         <p className="text-sm text-gray-500 mt-1">Kode {id} tidak terdaftar di perangkat ini.</p>
         <Link
-          href="/surat/saya"
+          href="/lacak"
           className="inline-block mt-4 px-4 py-2 bg-emerald-800 text-white rounded-xl text-xs font-semibold"
         >
-          Kembali ke Surat Saya
+          Kembali ke Lacak Surat
         </Link>
       </div>
     );

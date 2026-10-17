@@ -11,6 +11,9 @@ import {
   ArrowRight,
   Clock,
   Trash2,
+  ShieldCheck,
+  MessageCircle,
+  Search,
 } from "lucide-react";
 import {
   getNotifications,
@@ -78,6 +81,30 @@ export default function NotifikasiPage() {
               <span>Tandai Semua Sudah Dibaca</span>
             </button>
           )}
+        </div>
+
+        {/* Kebijakan Privasi Data Warga */}
+        <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-emerald-900/90 text-white shadow-md border border-emerald-700/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-400 text-emerald-950 flex items-center justify-center shrink-0 mt-0.5">
+              <ShieldCheck className="w-5 h-5 font-black" />
+            </div>
+            <div>
+              <h2 className="text-xs sm:text-sm font-bold text-amber-300">
+                Jaminan Privasi & Perlindungan Data Pribadi Warga
+              </h2>
+              <p className="text-[11px] sm:text-xs text-emerald-100/90 mt-0.5 leading-relaxed">
+                Demi keamanan data kependudukan (NIK dan keperluan surat), pemberitahuan status dokumen kini dikirimkan langsung oleh pamong desa ke nomor WhatsApp pribadi pemohon (100% gratis & privat). Anda juga dapat melacak status secara mandiri menggunakan nomor tiket.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/lacak"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 text-xs font-bold shrink-0 shadow-xs transition-transform active:scale-95"
+          >
+            <Search className="w-3.5 h-3.5" />
+            <span>Lacak Status Surat</span>
+          </Link>
         </div>
 
         {/* Notifications List */}

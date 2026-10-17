@@ -18,6 +18,7 @@ import {
   PhoneCall,
 } from "lucide-react";
 import { villageConfig } from "@/lib/config";
+import { getStoredVillageConfig } from "@/lib/storage";
 import { formatWhatsAppUrl } from "@/lib/utils";
 
 interface ServiceItem {
@@ -32,6 +33,16 @@ interface ServiceItem {
 }
 
 export default function LayananMandiriPage() {
+  const [config, setConfig] = React.useState(villageConfig);
+
+  React.useEffect(() => {
+    function loadConfig() {
+      setConfig(getStoredVillageConfig());
+    }
+    loadConfig();
+    window.addEventListener("village-storage-update", loadConfig);
+    return () => window.removeEventListener("village-storage-update", loadConfig);
+  }, []);
   const services: ServiceItem[] = [
     {
       id: "srv-1",
@@ -111,7 +122,7 @@ export default function LayananMandiriPage() {
             <div>
               <p className="font-semibold text-gray-500 dark:text-gray-400">Nomor Pelayanan Desa:</p>
               <p className="font-mono font-extrabold text-emerald-950 dark:text-white">
-                +{villageConfig.contact.whatsapp}
+                +{config.contact.whatsapp}
               </p>
             </div>
           </div>
@@ -124,7 +135,7 @@ export default function LayananMandiriPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((item) => {
             const Icon = item.icon;
-            const waUrl = formatWhatsAppUrl(villageConfig.contact.whatsapp, item.prefilledMessage);
+            const waUrl = formatWhatsAppUrl(config.contact.whatsapp, item.prefilledMessage);
 
             return (
               <a

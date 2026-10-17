@@ -1,26 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, MessageSquareWarning, FileText, Bell, PhoneForwarded } from "lucide-react";
-import { getUnreadNotificationCount } from "@/lib/storage";
+import { Home, MessageSquareWarning, FileText, Search, PhoneForwarded } from "lucide-react";
 
 export function MobileBottomNav() {
   const pathname = usePathname();
-  const [unreadCount, setUnreadCount] = useState<number>(0);
-
-  useEffect(() => {
-    function updateCount() {
-      setUnreadCount(getUnreadNotificationCount());
-    }
-    updateCount();
-
-    window.addEventListener("village-storage-update", updateCount);
-    return () => {
-      window.removeEventListener("village-storage-update", updateCount);
-    };
-  }, []);
 
   const navItems = [
     {
@@ -37,7 +23,6 @@ export function MobileBottomNav() {
       label: "Surat",
       href: "/surat",
       icon: FileText,
-      badge: null,
       highlight: true,
     },
     {
@@ -46,10 +31,9 @@ export function MobileBottomNav() {
       icon: MessageSquareWarning,
     },
     {
-      label: "Notifikasi",
-      href: "/notifikasi",
-      icon: Bell,
-      badge: unreadCount,
+      label: "Lacak",
+      href: "/lacak",
+      icon: Search,
     },
   ];
 
@@ -81,11 +65,6 @@ export function MobileBottomNav() {
                     isActive ? "scale-110 stroke-[2.5]" : "group-hover:scale-105"
                   }`}
                 />
-                {typeof item.badge === "number" && item.badge > 0 && (
-                  <span className="absolute -top-1.5 -right-2 bg-amber-500 text-white text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-white dark:ring-emerald-950 animate-pulse">
-                    {item.badge > 9 ? "9+" : item.badge}
-                  </span>
-                )}
               </div>
               <span className="text-[11px] leading-tight mt-1 tracking-tight">
                 {item.label}
