@@ -195,7 +195,7 @@ export default function LayananMandiriPage() {
               Ingin Membuat Surat Resmi Tanpa Lewat Chat?
             </h4>
             <p className="text-xs sm:text-sm text-emerald-200">
-              Anda bisa memakai formulir surat online untuk langsung mencetak dokumen dengan kop dan tanda tangan desa.
+              Anda bisa memakai formulir surat online, berkas akan diproses pamong desa dan dapat diambil langsung di Balai Desa Karangwaluh.
             </p>
           </div>
           <Link

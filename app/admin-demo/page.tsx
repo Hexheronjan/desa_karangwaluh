@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Clock,
-  Printer,
   Sparkles,
   ArrowRight,
   ExternalLink,
@@ -717,18 +716,7 @@ export default function AdminDemoPage() {
                         </a>
                       )}
 
-                      {item.status === "Siap Diambil" && (
-                        <Link
-                          href={`/surat/cetak/${item.id}`}
-                          target="_blank"
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-emerald-950 text-xs font-black shadow-xs sm:ml-auto"
-                          title="Cetak surat fisik untuk ditandatangani Kepala Desa dan distempel basah"
-                        >
-                          <Printer className="w-3.5 h-3.5" />
-                          <span>Cetak Fisik (Ttd Kades)</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </Link>
-                      )}
+
                     </div>
                   </div>
                 </div>
