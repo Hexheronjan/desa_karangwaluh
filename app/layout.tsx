@@ -70,6 +70,7 @@ export const metadata: Metadata = {
 };
 
 import { Suspense } from "react";
+import { AuthGuard } from "@/components/AuthGuard";
 
 export default function RootLayout({
   children,
@@ -79,6 +80,9 @@ export default function RootLayout({
   return (
     <html lang="id" className={`${plusJakartaSans.variable} font-sans scroll-smooth`}>
       <body className="min-h-screen flex flex-col bg-[#fcfbf7] dark:bg-[#091a13] text-[#0f291e] dark:text-[#f3f4f6] selection:bg-amber-400 selection:text-emerald-950">
+        <Suspense fallback={null}>
+          <AuthGuard />
+        </Suspense>
         <Suspense fallback={null}>
           <Navbar />
         </Suspense>

@@ -13,11 +13,13 @@ import {
   HeartHandshake,
   MessageCircle,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { villageConfig } from "@/lib/config";
 import { getStoredVillageConfig } from "@/lib/storage";
 import { formatWhatsAppUrl } from "@/lib/utils";
 
 export function Footer() {
+  const pathname = usePathname();
   const [config, setConfig] = React.useState(villageConfig);
 
   React.useEffect(() => {
@@ -28,6 +30,14 @@ export function Footer() {
     window.addEventListener("village-storage-update", loadConfig);
     return () => window.removeEventListener("village-storage-update", loadConfig);
   }, []);
+
+  if (pathname.startsWith("/admin-demo") || pathname.startsWith("/login")) {
+    return (
+      <footer className="no-print py-4 border-t border-emerald-900/10 dark:border-emerald-800/40 text-center text-xs text-gray-500 dark:text-gray-400 bg-white dark:bg-emerald-950/80">
+        <p>© {new Date().getFullYear()} Pemerintah Desa Karangwaluh • Panel Pengelola Pelayanan Desa (Hak Akses Terbatas)</p>
+      </footer>
+    );
+  }
 
   const waHelpUrl = formatWhatsAppUrl(
     config.contact.whatsapp,

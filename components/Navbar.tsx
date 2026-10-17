@@ -47,17 +47,21 @@ export function Navbar() {
     { label: "Produk UMKM", href: "/umkm" },
   ];
 
+  if (pathname.startsWith("/admin-demo") || pathname.startsWith("/login")) {
+    return null;
+  }
+
   return (
     <>
       {/* Main Sticky Glass Navbar */}
       <header
-        className={`sticky top-0 z-50 transition-all duration-300 w-full ${
+        className={`sticky top-0 z-50 transition-all duration-300 w-full overflow-x-clip ${
           isScrolled
             ? "bg-white/95 dark:bg-emerald-950/95 backdrop-blur-md shadow-md border-b border-emerald-900/10 dark:border-emerald-800/30 py-2.5 sm:py-3"
-            : "bg-white/95 dark:bg-emerald-950/95 backdrop-blur-md py-3.5 sm:py-4 border-b border-emerald-900/10 shadow-xs"
+            : "bg-white/95 dark:bg-emerald-950/95 backdrop-blur-md py-3 sm:py-3.5 border-b border-emerald-900/10 shadow-xs"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4 lg:gap-6 w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4 w-full">
           {/* Logo & Identity */}
           <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
             <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-1 bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-800/50 flex items-center justify-center shadow-xs transition-transform group-hover:scale-105">
@@ -72,11 +76,11 @@ export function Navbar() {
               />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-sm sm:text-base lg:text-lg text-emerald-950 dark:text-emerald-100 tracking-tight group-hover:text-emerald-800 transition-colors">
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold text-sm sm:text-base lg:text-lg text-emerald-950 dark:text-emerald-100 tracking-tight group-hover:text-emerald-800 transition-colors whitespace-nowrap">
                   {config.name}
                 </span>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 hidden xl:inline">
+                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 hidden 2xl:inline">
                   Sampung • Ponorogo
                 </span>
               </div>
@@ -87,14 +91,14 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-emerald-50/80 dark:bg-emerald-900/40 p-1 xl:p-1.5 rounded-full border border-emerald-200/60 dark:border-emerald-800/50 shadow-inner">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 bg-emerald-50/80 dark:bg-emerald-900/40 p-1 rounded-full border border-emerald-200/60 dark:border-emerald-800/50 shadow-inner">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 xl:px-4 py-1.5 xl:py-2 rounded-full text-xs xl:text-sm font-semibold tracking-wide transition-all whitespace-nowrap ${
+                  className={`px-2.5 xl:px-3.5 py-1.5 rounded-full text-xs xl:text-sm font-semibold tracking-wide transition-all whitespace-nowrap ${
                     isActive
                       ? "bg-emerald-800 text-white shadow-sm"
                       : "text-emerald-950/80 dark:text-emerald-100/90 hover:text-emerald-900 hover:bg-emerald-100/70 dark:hover:bg-emerald-800/50"
@@ -111,9 +115,9 @@ export function Navbar() {
             {/* Buat Surat Direct CTA (Desktop & Tablet) */}
             <Link
               href="/surat"
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-4 py-2 sm:py-2.5 bg-gradient-to-r from-emerald-800 to-emerald-900 hover:from-emerald-700 hover:to-emerald-800 text-white text-xs sm:text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-98 shrink-0 ring-2 ring-emerald-600/30"
+              className="hidden xl:inline-flex items-center gap-1.5 px-3.5 py-2 bg-gradient-to-r from-emerald-800 to-emerald-900 hover:from-emerald-700 hover:to-emerald-800 text-white text-xs font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-98 shrink-0 ring-2 ring-emerald-600/30 whitespace-nowrap"
             >
-              <FileText className="w-4 h-4 text-amber-300 shrink-0" />
+              <FileText className="w-3.5 h-3.5 text-amber-300 shrink-0" />
               <span>Buat Surat</span>
             </Link>
 

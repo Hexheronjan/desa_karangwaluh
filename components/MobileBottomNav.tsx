@@ -8,6 +8,10 @@ import { Home, MessageSquareWarning, FileText, Search, PhoneForwarded } from "lu
 export function MobileBottomNav() {
   const pathname = usePathname();
 
+  if (pathname.startsWith("/admin-demo") || pathname.startsWith("/login")) {
+    return null;
+  }
+
   const navItems = [
     {
       label: "Beranda",
