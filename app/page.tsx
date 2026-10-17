@@ -92,6 +92,7 @@ export default function HomePage() {
             priority
             sizes="100vw"
             className="object-cover object-center scale-102 transition-transform duration-1000 ease-out"
+            unoptimized
           />
           {/* Multi-layered Warm Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-emerald-950/65 to-emerald-950/30" />
@@ -558,6 +559,7 @@ export default function HomePage() {
                         fill
                         sizes="(max-width: 768px) 100vw, 33vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        unoptimized
                       />
                       <div className="absolute top-3 left-3 bg-white/90 dark:bg-emerald-950/90 backdrop-blur-xs px-2.5 py-1 rounded-full text-xs font-bold text-emerald-900 dark:text-emerald-200 shadow-xs">
                         {product.category}

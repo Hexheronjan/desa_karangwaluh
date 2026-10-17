@@ -96,7 +96,7 @@ export interface ProductUmkm {
   description: string;
   image: string;
   sellerName: string;
-  // TODO: Sesuaikan dengan nomor WhatsApp pengrajin/penjual produk
+  // TODO: Ganti dengan nomor WhatsApp aktif penjual / perangkat desa
   whatsappNumber: string;
   orderMessage: string;
   rating: number;
@@ -117,26 +117,26 @@ export const localProducts: ProductUmkm[] = [
   },
   {
     id: "umkm-2",
-    name: "Madu Murni Klanceng & Hutan Karangwaluh",
-    category: "Hasil Hutan & Ternak Alami",
-    priceEstimate: "Rp65.000 - Rp120.000",
-    description: "Madu asli dari lebah klanceng (Trigona) yang dibudidayakan di sekitar lereng bukit Sampung. Berkhasiat tinggi untuk daya tahan tubuh, rasa manis segar dengan sentuhan asam alami.",
-    image: "/images/desa/umkm-madu.svg",
-    sellerName: "Pak Samidi (Dusun Karangmulyo)",
-    whatsappNumber: "6281234567890", // TODO: Ganti dengan WhatsApp peternak lebah
-    orderMessage: "Halo Pak Samidi, saya ingin pesan Madu Murni Klanceng asli Karangwaluh.",
+    name: "Seni & Kerajinan Reyog 'Seco Drono'",
+    category: "Seni Budaya & Cinderamata",
+    priceEstimate: "Jasa Pentas & Kerajinan",
+    description: "Paguyuban kesenian Reyog Ponorogo asli Desa Karangwaluh. Menerima undangan pementasan seni tradisional, sewa kostum dadak merak & bujang ganong, serta pernak-pernik khas Ponorogo.",
+    image: "/images/desa/gambar4.webp",
+    sellerName: "Paguyuban Seco Drono Karangwaluh",
+    whatsappNumber: "6281234567890", // TODO: Ganti dengan WhatsApp pengurus paguyuban
+    orderMessage: "Halo Paguyuban Seco Drono Karangwaluh, saya ingin berkonsultasi mengenai pementasan seni Reyog.",
     rating: 5.0,
   },
   {
     id: "umkm-3",
-    name: "Kerajinan Besek & Anyaman Bambu Lestari",
-    category: "Kerajinan Ramah Lingkungan",
-    priceEstimate: "Rp5.000 - Rp45.000",
-    description: "Anyaman bambu alami ramah lingkungan untuk wadah berkatan, kemasan oleh-oleh tradisional, hingga hiasan rumah bernuansa pedesaan Jawa estetis karya pengrajin sepuh desa.",
-    image: "/images/desa/umkm-anyaman.svg",
-    sellerName: "Kelompok Perajin Anyaman Bambu Lestari",
-    whatsappNumber: "6281234567890", // TODO: Ganti dengan WhatsApp kelompok perajin
-    orderMessage: "Halo Kelompok Bambu Lestari, saya tertarik dengan produk kerajinan anyaman bambu Karangwaluh.",
+    name: "Sentra Kemitraan Komunitas & UMKM Desa",
+    category: "Kemitraan Usaha Warga",
+    priceEstimate: "Pelayanan Mandiri",
+    description: "Wadah pendampingan legalitas izin usaha mikro (NIB), fasilitasi permodalan, serta etalase pemasaran produk unggulan pertanian dan olahan tangan warga Karangwaluh.",
+    image: "/images/desa/gambar3.webp",
+    sellerName: "Pemerintah Desa & Paguyuban Warga",
+    whatsappNumber: "6281234567890", // TODO: Ganti dengan nomor WhatsApp pelayanan desa
+    orderMessage: "Halo Pengurus Desa Karangwaluh, saya tertarik bermitra dengan produk dan sentra UMKM desa.",
     rating: 4.8,
   },
 ];
@@ -154,25 +154,25 @@ export interface NewsItem {
 export const villageNews: NewsItem[] = [
   {
     id: "berita-1",
-    title: "Jadwal Penyaluran Bantuan Pangan & Posyandu Balita Bulan Ini",
+    title: "Pentas Seni Reyog 'Seco Drono' Semarakkan Balai Desa Karangwaluh",
     date: "15 Oktober 2026",
-    category: "Kesehatan",
-    summary: "Pemerintah Desa Karangwaluh mengundang warga sasaran untuk hadir di Balai Desa mulai pukul 08.30 WIB dengan membawa fotokopi KK dan KTP.",
+    category: "Kegiatan Warga",
+    summary: "Warga antusias menyaksikan pertunjukan kesenian tradisional Reyog Ponorogo paguyuban Seco Drono di halaman Balai Desa Karangwaluh.",
     author: "Pemerintah Desa",
   },
   {
     id: "berita-2",
-    title: "Gotong Royong Perawatan Saluran Irigasi Sawah Dusun Krajan",
+    title: "Musyawarah & Pelantikan Lembaga Desa di Balai Desa",
     date: "12 Oktober 2026",
-    category: "Kegiatan Warga",
-    summary: "Warga bersama kelompok tani sukses membersihkan aliran air irigasi menjelang musim tanam padi agar pasokan air ke sawah warga merata.",
-    author: "Kelompok Tani Karangwaluh",
+    category: "Pembangunan",
+    summary: "Pemerintah desa sukses menyelenggarakan pelantikan panitia dan koordinasi bersama tokoh masyarakat demi kemajuan Karangwaluh.",
+    author: "Sekretariat Desa",
   },
   {
     id: "berita-3",
     title: "Optimalisasi Layanan Surat Kependudukan Digital Ramah HP",
     date: "08 Oktober 2026",
-    category: "Pembangunan",
+    category: "Pemberitahuan",
     summary: "Kini warga Desa Karangwaluh dapat mengajukan surat keterangan kapan saja dari ponsel tanpa perlu bolak-balik mengantre di kantor desa.",
     author: "Pelayanan Publik Mandiri",
   },
@@ -182,7 +182,7 @@ export const villageNews: NewsItem[] = [
 export interface GalleryItem {
   id: string;
   title: string;
-  category: "Kantor" | "Panorama" | "Pertanian" | "UMKM" | "Infrastruktur";
+  category: "Kantor" | "Kegiatan" | "Pelayanan" | "Warga" | "Panorama" | "UMKM";
   src: string;
   description: string;
 }
@@ -190,51 +190,44 @@ export interface GalleryItem {
 export const villageGallery: GalleryItem[] = [
   {
     id: "gal-1",
-    title: "Lanskap Sawah & Perbukitan Sampung",
-    category: "Panorama",
-    src: "/images/desa/hero-karangwaluh.jpg",
-    description: "Hamparan sawah hijau subur berpadu dengan kabut pagi perbukitan karst khas Ponorogo.",
+    title: "Gedung Balai Desa Karangwaluh",
+    category: "Kantor",
+    src: "/images/desa/gambar3.webp",
+    description: "Gedung megah Balai Desa Karangwaluh berlantai dua sebagai pusat pelayanan administrasi dan koordinasi warga.",
   },
   {
     id: "gal-2",
-    title: "Balai & Kantor Desa Karangwaluh",
-    category: "Kantor",
-    src: "/images/desa/kantor-desa.jpg",
-    description: "Gedung pusat pelayanan masyarakat berarsitektur Joglo dengan halaman bersih dan teduh.",
+    title: "Pentas Seni Reyog 'Seco Drono' Karangwaluh",
+    category: "Kegiatan",
+    src: "/images/desa/gambar4.webp",
+    description: "Pelestarian seni budaya adiluhung Reyog Ponorogo paguyuban Seco Drono di pelataran Balai Desa Karangwaluh.",
   },
   {
     id: "gal-3",
-    title: "Sentra Olahan Keripik Pisang & Singkong",
-    category: "UMKM",
-    src: "/images/desa/umkm-keripik.jpg",
-    description: "Produksi camilan renyah alami dari hasil perkebunan warga Karangwaluh.",
+    title: "Pelantikan Lembaga & Musyawarah Desa",
+    category: "Pelayanan",
+    src: "/images/desa/gambar2.webp",
+    description: "Kegiatan pelantikan dan koordinasi musyawarah mufakat di aula pertemuan Balai Desa Karangwaluh.",
   },
   {
     id: "gal-4",
-    title: "Madu Klanceng Alami Lereng Karangwaluh",
-    category: "UMKM",
-    src: "/images/desa/umkm-madu.svg",
-    description: "Budidaya lebah tanpa sengat menghasilkan madu murni berkualitas tinggi.",
+    title: "Pertemuan Guyub Rukun Warga Desa",
+    category: "Warga",
+    src: "/images/desa/gambar1.webp",
+    description: "Semangat gotong royong dan silaturahmi pamong desa bersama warga mewujudkan Karangwaluh yang tenteram.",
   },
   {
     id: "gal-5",
-    title: "Panen Raya Padi Warga Karangwaluh",
-    category: "Pertanian",
-    src: "/images/desa/kegiatan-desa.svg",
-    description: "Semangat gotong royong warga desa saat musim panen padi di sawah terasering.",
+    title: "Sentra Olahan Keripik Pisang & Singkong",
+    category: "UMKM",
+    src: "/images/desa/umkm-keripik.jpg",
+    description: "Produksi camilan renyah gurih alami kemasan modern hasil pertanian warga Karangwaluh.",
   },
   {
     id: "gal-6",
-    title: "Jalan Lingkungan Desa yang Rapi dan Asri",
-    category: "Infrastruktur",
-    src: "/images/desa/jalan-desa.svg",
-    description: "Pembangunan akses jalan beraspal mulus dilengkapi penerangan tenaga surya ramah lingkungan.",
-  },
-  {
-    id: "gal-7",
-    title: "Kerajinan Tangan Anyaman Bambu",
-    category: "UMKM",
-    src: "/images/desa/umkm-anyaman.svg",
-    description: "Kearifan lokal anyaman bambu lestari yang diwariskan turun temurun oleh warga desa.",
+    title: "Lanskap Sawah & Perbukitan Sampung",
+    category: "Panorama",
+    src: "/images/desa/hero-karangwaluh.jpg",
+    description: "Hamparan sawah hijau subur berpadu dengan kabut pagi perbukitan karst khas Sampung Ponorogo.",
   },
 ];

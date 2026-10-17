@@ -42,11 +42,10 @@ Data di bawah ini belum dipublikasikan secara daring untuk umum, sehingga dileta
 ## 4. Sumber Aset Visual (Foto & Ilustrasi)
 Seluruh aset visual disimpan secara lokal di `public/images/desa/` (tidak melakukan hotlinking eksternal):
 
-1. **`hero-karangwaluh.jpg`**: Lanskap persawahan terasering hijau subur dengan latar perbukitan kapur khas Sampung Ponorogo di bawah sinar matahari pagi. Resolusi tinggi 1920x1080.
-2. **`kantor-desa.jpg`**: Bangunan Balai Desa Karangwaluh berarsitektur Joglo Jawa Timur yang bersih dan berwibawa dengan tiang bendera Merah Putih di halaman beraspal.
-3. **`umkm-keripik.jpg`**: Produk keripik pisang & singkong gurih renyah dalam kemasan *standing pouch* ramah lingkungan khas sentra UMKM Karangwaluh.
-4. **`umkm-madu.svg`**: Ilustrasi vektor presisi toples madu murni hutan lebah klanceng khas Sampung Ponorogo dengan ornamen sarang lebah & sendok kayu.
-5. **`kegiatan-desa.svg`**: Ilustrasi vektor gotong royong dan panen raya padi sawah terasering di bawah bayang-bayang bukit kapur Sampung.
-6. **`jalan-desa.svg`**: Ilustrasi vektor jalan aspal desa yang mulus, asri, dengan lampu PJU surya dan tanaman bunga bougainvillea.
-7. **`umkm-anyaman.svg`**: Ilustrasi vektor produk kerajinan anyaman bambu & besek tradisional buatan tangan pengrajin lokal.
-8. **`logo.gif`**: Lambang resmi Kabupaten Ponorogo yang digunakan sebagai identitas resmi pemerintahan Desa Karangwaluh pada navbar, footer, surat resmi, dan favicon website.
+1. **`gambar3.webp`** (Sumber: Google Maps Balai Desa Karangwaluh `https://share.google/x2fuvuajlfGbsESly`): Foto asli bangunan bertingkat Balai Desa Karangwaluh dengan plang nama emas megah "BALAI DESA KARANGWALUH" bersama pamong dan warga di tangga depan.
+2. **`gambar4.webp`** (Sumber: Google Maps Balai Desa Karangwaluh `https://share.google/x2fuvuajlfGbsESly`): Foto asli Paguyuban Pentas Seni Reyog Ponorogo "SECO DRONO" Desa Karangwaluh, Kec. Sampung, Kab. Ponorogo saat tampil di halaman balai desa.
+3. **`gambar2.webp`** (Sumber: Google Maps Balai Desa Karangwaluh `https://share.google/x2fuvuajlfGbsESly`): Foto asli kegiatan Pelantikan KPPS / Musyawarah Kelembagaan Desa Karangwaluh lengkap dengan spanduk nama desa dan garuda pancasila.
+4. **`gambar1.webp`** (Sumber: Google Maps Balai Desa Karangwaluh `https://share.google/x2fuvuajlfGbsESly`): Foto asli pertemuan dan musyawarah guyub rukun pamong bersama warga di dalam Balai Desa Karangwaluh.
+5. **`umkm-keripik.jpg`**: Foto produk olahan lokal keripik pisang dan singkong khas Desa Karangwaluh kemasan standing pouch.
+6. **`hero-karangwaluh.jpg`**: Foto pemandangan persawahan dan perbukitan hijau khas kawasan Sampung Ponorogo di bawah sinar pagi hari.
+7. **`logo.gif`**: Lambang resmi Kabupaten Ponorogo yang digunakan sebagai identitas resmi pemerintahan Desa Karangwaluh pada navbar, footer, surat resmi, dan favicon website.

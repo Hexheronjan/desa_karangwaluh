@@ -13,7 +13,7 @@ export function GalleryLightbox({ items }: GalleryLightboxProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [filter, setFilter] = useState<string>("Semua");
 
-  const categories = ["Semua", "Kantor", "Panorama", "Pertanian", "UMKM", "Infrastruktur"];
+  const categories = ["Semua", "Kantor", "Kegiatan", "Pelayanan", "Warga", "UMKM", "Panorama"];
 
   const filteredItems =
     filter === "Semua" ? items : items.filter((item) => item.category === filter);
@@ -77,6 +77,7 @@ export function GalleryLightbox({ items }: GalleryLightboxProps) {
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
+                unoptimized
               />
               <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/85 via-emerald-950/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
 
@@ -160,6 +161,7 @@ export function GalleryLightbox({ items }: GalleryLightboxProps) {
                 fill
                 className="object-contain"
                 priority
+                unoptimized
               />
             </div>
             <div className="mt-4 text-center max-w-xl text-white">
